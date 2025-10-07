@@ -1,0 +1,19 @@
+# MAHSM v0.1.0 - Core Dependencies
+# Multi-Agent Hyper-Scaling Methods
+
+# DSPy for prompt optimization
+dspy-ai>=2.4.0
+
+# LangGraph for runtime orchestration
+langgraph>=0.2.0
+
+# LangChain Core for message types only
+langchain-core>=0.2.0
+
+# LangFuse for tracing and observability
+langfuse>=2.0.0
+
+# OpenAI SDK for model interactions
+openai>=1.0.0
+
+
