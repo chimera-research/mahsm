@@ -1,3 +1,4 @@
+import os
 import dspy
 lm = dspy.LM("openai/gpt-4o-mini", api_key=os.getenv("OPENAI_API_KEY"))
 dspy.configure(lm=lm)

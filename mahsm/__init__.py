@@ -8,7 +8,13 @@ from .core import init, dspy_node
 # --- Curated Namespaces ---
 from . import dspy
 from . import graph
-from . import testing
+
+# Testing module may not work on Windows due to eval-protocol dependency
+try:
+    from . import testing
+except (ImportError, ModuleNotFoundError) as e:
+    import warnings
+    warnings.warn(f"mahsm.testing module unavailable (likely Windows compatibility issue): {e}")
 
 # --- Top-level convenience re-exports ---
 from .graph import END, START
