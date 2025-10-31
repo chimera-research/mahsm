@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 120">
+  <!-- Define gradient for modern look -->
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#f093fb;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f5576c;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4facfe;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#00f2fe;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Four interconnected nodes representing the four pillars -->
+  <g id="icon">
+    <!-- Central hub -->
+    <circle cx="60" cy="60" r="8" fill="url(#grad1)" opacity="0.9"/>
+    
+    <!-- Top node (DSPy - Reasoning) -->
+    <circle cx="60" cy="25" r="12" fill="url(#grad1)" opacity="0.8"/>
+    <path d="M 60 33 L 60 52" stroke="url(#grad1)" stroke-width="2.5" fill="none" opacity="0.6"/>
+    
+    <!-- Right node (LangGraph - Orchestration) -->
+    <circle cx="95" cy="60" r="12" fill="url(#grad2)" opacity="0.8"/>
+    <path d="M 87 60 L 68 60" stroke="url(#grad2)" stroke-width="2.5" fill="none" opacity="0.6"/>
+    
+    <!-- Bottom node (LangFuse - Observability) -->
+    <circle cx="60" cy="95" r="12" fill="url(#grad3)" opacity="0.8"/>
+    <path d="M 60 87 L 60 68" stroke="url(#grad3)" stroke-width="2.5" fill="none" opacity="0.6"/>
+    
+    <!-- Left node (EvalProtocol - Testing) -->
+    <circle cx="25" cy="60" r="12" fill="#feca57" opacity="0.8"/>
+    <path d="M 33 60 L 52 60" stroke="#feca57" stroke-width="2.5" fill="none" opacity="0.6"/>
+    
+    <!-- Connecting arcs between outer nodes (representing integration) -->
+    <path d="M 66 30 Q 80 40 90 52" stroke="url(#grad1)" stroke-width="1.5" fill="none" opacity="0.3" stroke-dasharray="3,3"/>
+    <path d="M 90 68 Q 80 80 66 90" stroke="url(#grad2)" stroke-width="1.5" fill="none" opacity="0.3" stroke-dasharray="3,3"/>
+    <path d="M 54 90 Q 40 80 30 68" stroke="url(#grad3)" stroke-width="1.5" fill="none" opacity="0.3" stroke-dasharray="3,3"/>
+    <path d="M 30 52 Q 40 40 54 30" stroke="#feca57" stroke-width="1.5" fill="none" opacity="0.3" stroke-dasharray="3,3"/>
+  </g>
+  
+  <!-- Text: mahsm -->
+  <text x="125" y="75" font-family="'Inter', 'Segoe UI', system-ui, sans-serif" font-size="48" font-weight="700" fill="#2d3748" letter-spacing="-1">
+    mahsm
+  </text>
+  
+  <!-- Tagline -->
+  <text x="127" y="92" font-family="'Inter', 'Segoe UI', system-ui, sans-serif" font-size="11" font-weight="400" fill="#718096" letter-spacing="0.5">
+    Multi-Agent Hyper-Scaling Methods
+  </text>
+</svg>

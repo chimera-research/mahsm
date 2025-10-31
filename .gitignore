@@ -1,4 +1,4 @@
-# MAHSM .gitignore
+# mahsm .gitignore
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -144,7 +144,7 @@ cython_debug/
 *.swo
 *~
 
-# MAHSM specific
+# mahsm specific
 .mahsm/
 *.mahsm.json
 
