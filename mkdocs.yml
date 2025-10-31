@@ -1,0 +1,73 @@
+# mkdocs.yml
+
+site_name: mahsm v0.1.0
+site_url: https://chimera-research.github.io/mahsm/
+site_author: Sohum Kothavade
+site_description: A Declarative Framework for Building Production-Grade AI Systems
+
+# Repository
+repo_name: chimera-research/mahsm
+repo_url: https://github.com/chimera-research/mahsm
+edit_uri: "" # Disables the "Edit on GitHub" link for now
+
+# Theme Configuration
+theme:
+  name: material
+  logo: assets/logo.svg
+  palette:
+    # Palette toggle for light vs dark mode
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: black
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.instant
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.annotate
+    - content.code.copy
+
+# Extensions
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - admonition
+  - toc:
+      permalink: true
+
+plugins:
+  - search
+  - git-revision-date-localized:
+      type: timeago
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            show_root_heading: true
+            show_root_toc_entry: true
+
+# Page Tree (Navigation)
+nav:
+  - 'Home': 'index.md'
+  - 'Getting Started':
+    - 'Installation': 'getting-started/installation.md'
+    - 'Quickstart': 'getting-started/quickstart.md'
+  - 'Core Concepts':
+    - 'The Four Pillars': 'concepts/four-pillars.md'
+    - 'Declarative by Design': 'concepts/declarative-design.md'
+    - 'The Development Workflow': 'concepts/workflow.md'
+  - 'API Reference': 'api-reference.md'
