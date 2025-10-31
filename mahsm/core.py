@@ -21,36 +21,72 @@ def init():
     print("mahsm: DSPy instrumented for automatic tracing.")
     return CallbackHandler()
 
-class dspy_node:
+def dspy_node(module_or_class):
     """
-    A decorator that transforms a dspy.Module class into a factory for
-    creating LangGraph-compatible node functions.
+    A decorator/wrapper that transforms a dspy.Module (class or instance) into
+    a LangGraph-compatible node function.
+    
+    Usage:
+        # As a decorator on a class
+        @ma.dspy_node
+        class MyModule(ma.Module):
+            ...
+        
+        # As a functional wrapper on an instance
+        cot = ma.dspy.ChainOfThought("query -> answer")
+        node = ma.dspy_node(cot)
     """
-    def __init__(self, cls):
-        if not issubclass(cls, dspy.Module):
+    # Check if we're decorating a class or wrapping an instance
+    if inspect.isclass(module_or_class):
+        # Class decorator path
+        if not issubclass(module_or_class, dspy.Module):
             raise TypeError("dspy_node can only decorate dspy.Module subclasses.")
-        self.dspy_module_class = cls
-        # Introspect the forward method to find the expected inputs
-        self.input_fields = inspect.signature(cls.forward).parameters.keys()
-
-    def __call__(self, *args, **kwargs):
-        """
-        When the decorated class is instantiated, this returns the actual
-        LangGraph node function that LangGraph will execute.
-        """
-        dspy_instance = self.dspy_module_class(*args, **kwargs)
-
+        
+        # Return a wrapper class that will instantiate and convert
+        class WrappedModule:
+            def __init__(self, *args, **kwargs):
+                self.dspy_instance = module_or_class(*args, **kwargs)
+                # Introspect the forward method, excluding 'self'
+                params = inspect.signature(self.dspy_instance.forward).parameters
+                self.input_fields = [k for k in params.keys() if k != 'self']
+            
+            def __call__(self, state: dict) -> dict:
+                # 1. Gather inputs from state by matching keys with forward() args
+                dspy_inputs = {key: state[key] for key in self.input_fields if key in state}
+                
+                # 2. Execute the DSPy module (call forward directly)
+                result = self.dspy_instance(**dspy_inputs)
+                
+                # 3. Prepare state updates by returning the module's output fields
+                state_updates = {
+                    key: value for key, value in result.__dict__.items() if not key.startswith('_')
+                }
+                return state_updates
+        
+        return WrappedModule
+    
+    elif isinstance(module_or_class, dspy.Module):
+        # Instance wrapping path
+        dspy_instance = module_or_class
+        
+        # Introspect the forward method, excluding 'self'
+        params = inspect.signature(dspy_instance.forward).parameters
+        input_fields = [k for k in params.keys() if k != 'self']
+        
         def node_function(state: dict) -> dict:
             # 1. Gather inputs from state by matching keys with forward() args
-            dspy_inputs = {key: state[key] for key in self.input_fields if key in state}
-
+            dspy_inputs = {key: state[key] for key in input_fields if key in state}
+            
             # 2. Execute the DSPy module
-            result = dspy_instance.with_retry(**dspy_inputs)
-
+            result = dspy_instance(**dspy_inputs)
+            
             # 3. Prepare state updates by returning the module's output fields
             state_updates = {
                 key: value for key, value in result.__dict__.items() if not key.startswith('_')
             }
             return state_updates
-            
+        
         return node_function
+    
+    else:
+        raise TypeError("dspy_node requires either a dspy.Module class or instance.")

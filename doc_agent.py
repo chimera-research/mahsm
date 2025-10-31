@@ -4,7 +4,7 @@ import dspy # Still needed for settings
 
 # --- Configure DSPy for direct execution ---
 # This will be the default model unless overridden by the testing harness.
-turbo = dspy.OpenAI(model='gpt-5-mini', max_tokens=4000)
+turbo = dspy.OpenAI(model='gpt-4o-mini', max_tokens=4000)
 dspy.settings.configure(lm=turbo)
 
 
@@ -47,7 +47,7 @@ workflow = ma.graph.StateGraph(CodeGenerationState)
 workflow.add_node("generator", CodeGenerator())
 workflow.add_node("critic", CodeCritic())
 workflow.add_edge(ma.START, "generator")
-workflow.add_conditional_edges("generator", "critic", { "critic": "critic" }) # Always go to critic after generating
+workflow.add_edge("generator", "critic")  # Always go to critic after generating
 workflow.add_conditional_edges("critic", should_refine_code)
 
 # 5. COMPILE THE GRAPH

@@ -39,6 +39,6 @@ async def test_code_generation_quality(row: ma.testing.EvaluationRow) -> ma.test
     """
     return await ma.testing.aha_judge(
         row,
-        judge_model="openai/gpt-5-mini",
+        judge_model="openai/gpt-4o-mini",
         rubric="Does the final 'generated_code' in the assistant's message correctly implement the use case from the user's message? The code must be complete and correct."
-    )
+    ))
