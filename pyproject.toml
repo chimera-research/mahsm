@@ -7,6 +7,7 @@ requires-python = ">=3.10"
 dependencies = [
     "dspy>=3.0.3",
     "eval-protocol[langfuse]>=0.2.64",
+    "langchain>=0.3.0",
     "langfuse>=3.8.1",
     "langgraph>=1.0.1",
     "openinference-instrumentation-dspy>=0.1.30",
