@@ -63,11 +63,52 @@ plugins:
 # Page Tree (Navigation)
 nav:
   - 'Home': 'index.md'
+  
   - 'Getting Started':
-    - 'Installation': 'getting-started/installation.md'
-    - 'Quickstart': 'getting-started/quickstart.md'
-  - 'Core Concepts':
-    - 'The Four Pillars': 'concepts/four-pillars.md'
-    - 'Declarative by Design': 'concepts/declarative-design.md'
-    - 'The Development Workflow': 'concepts/workflow.md'
-  - 'API Reference': 'api-reference.md'
+      - 'Installation': 'getting-started/installation.md'
+      - 'Quick Start': 'getting-started/quickstart.md'
+      - 'Core Concepts': 'getting-started/core-concepts.md'
+  
+  - 'Building Blocks':
+      - 'DSPy':
+          - 'Overview': 'building-blocks/dspy/overview.md'
+          - 'Signatures': 'building-blocks/dspy/signatures.md'
+          - 'Modules': 'building-blocks/dspy/modules.md'
+          - 'Optimizers': 'building-blocks/dspy/optimizers.md'
+          - 'Best Practices': 'building-blocks/dspy/best-practices.md'
+      - 'LangGraph':
+          - 'Overview': 'building-blocks/langgraph/overview.md'
+          - 'State Management': 'building-blocks/langgraph/state.md'
+          - 'Nodes & Edges': 'building-blocks/langgraph/nodes-edges.md'
+          - 'Conditional Routing': 'building-blocks/langgraph/conditional-routing.md'
+          - 'Compilation & Execution': 'building-blocks/langgraph/compilation.md'
+          - 'Visualization': 'building-blocks/langgraph/visualization.md'
+      - 'Langfuse (Tracing)':
+          - 'Overview': 'building-blocks/langfuse/overview.md'
+          - 'Initialization': 'building-blocks/langfuse/initialization.md'
+          - 'DSPy Tracing': 'building-blocks/langfuse/dspy-tracing.md'
+          - 'LangGraph Tracing': 'building-blocks/langfuse/langgraph-tracing.md'
+          - 'Manual Tracing': 'building-blocks/langfuse/manual-tracing.md'
+      - 'EvalProtocol':
+          - 'Overview': 'building-blocks/evalprotocol/overview.md'
+          - 'Evaluation Tests': 'building-blocks/evalprotocol/evaluation-tests.md'
+          - 'Langfuse Integration': 'building-blocks/evalprotocol/langfuse-integration.md'
+          - 'LangGraph Integration': 'building-blocks/evalprotocol/langgraph-integration.md'
+  
+  - 'Guides':
+      - 'Your First Agent': 'guides/first-agent.md'
+      - 'Multi-Agent Systems': 'guides/multi-agent-systems.md'
+      - 'Adding Tools': 'guides/adding-tools.md'
+      - 'Optimization Workflow': 'guides/optimization-workflow.md'
+      - 'Production Deployment': 'guides/production-deployment.md'
+  
+  - 'Examples':
+      - 'Basic Q&A': 'examples/basic-qa.md'
+      - 'Research Agent': 'examples/research-agent.md'
+      - 'Multi-Hop Reasoning': 'examples/multi-hop-reasoning.md'
+      - 'Evaluation Pipeline': 'examples/evaluation-pipeline.md'
+  
+  - 'API Reference':
+      - 'mahsm.core': 'api/core.md'
+      - 'mahsm.tracing': 'api/tracing.md'
+      - 'mahsm.testing': 'api/testing.md'
