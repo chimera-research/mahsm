@@ -94,10 +94,11 @@ Let's build a **research agent** that searches for information and synthesizes a
 import mahsm as ma
 from typing import TypedDict, Optional
 import dspy
+import os
 
 # Configure DSPy with your preferred model
-lm = dspy.OpenAI(model='gpt-4o-mini', max_tokens=2000)
-dspy.settings.configure(lm=lm)
+lm = dspy.LM('openai/gpt-4o-mini', api_key=os.getenv("OPENAI_API_KEY"), max_tokens=2000)
+dspy.configure(lm=lm)
 
 
 # 1. DEFINE STATE
@@ -208,7 +209,7 @@ Update your `research_agent.py` to enable automatic tracing:
 
 ```python
 # Add at the top of your script, after imports
-handler = ma.init()  # Initializes Langfuse + DSPy instrumentation
+handler = ma.tracing.init()  # Initializes Langfuse + DSPy instrumentation
 print("✅ Tracing enabled! All LLM calls will be logged to Langfuse.")
 ```
 

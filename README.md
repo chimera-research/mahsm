@@ -68,13 +68,16 @@ pip install mahsm
 import mahsm as ma
 from typing import TypedDict
 import dspy
+import os
 
-# 1. Configure
-lm = dspy.OpenAI(model='gpt-4o-mini')
-dspy.settings.configure(lm=lm)
-ma.init()  # Enable tracing
+# 1. Configure DSPy
+lm = dspy.LM('openai/gpt-4o-mini', api_key=os.getenv("OPENAI_API_KEY"))
+dspy.configure(lm=lm)
 
-# 2. Define agent
+# 2. Enable tracing
+handler = ma.tracing.init()
+
+# 3. Define agent state
 class State(TypedDict):
     query: str
     answer: str
@@ -159,10 +162,10 @@ workflow.add_node("cot", node)
 - ✅ Returns result as state updates (non-private fields)
 - ✅ No manual state mapping needed
 
-### 2. `ma.init()` - One-Line Tracing
+### 2. `ma.tracing.init()` - One-Line Tracing
 
 ```python
-handler = ma.init()
+handler = ma.tracing.init()
 ```
 
 **Automatically:**
@@ -292,3 +295,4 @@ mahsm stands on the shoulders of giants:
 <p align="center">
   <a href="https://github.com/chimera-research/mahsm">⭐ Star us on GitHub</a>
 </p>
+

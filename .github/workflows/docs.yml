@@ -33,7 +33,12 @@ jobs:
           pip install mkdocs-git-revision-date-localized-plugin
           pip install mkdocstrings[python]
 
+      - name: Configure Git
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email github-actions[bot]@users.noreply.github.com
+
       - name: Build and deploy docs
-        run: mkdocs gh-deploy --force
+        run: mkdocs gh-deploy --force --verbose
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
