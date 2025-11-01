@@ -77,6 +77,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#one-universal-phase-abstraction" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -975,7 +980,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../building-blocks/langfuse/overview.md" class="md-nav__link">
+      <a href="../../building-blocks/langfuse/overview/" class="md-nav__link">
         
   
   
@@ -998,7 +1003,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../building-blocks/langfuse/initialization.md" class="md-nav__link">
+      <a href="../../building-blocks/langfuse/initialization/" class="md-nav__link">
         
   
   
@@ -1021,7 +1026,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../building-blocks/langfuse/dspy-tracing.md" class="md-nav__link">
+      <a href="../../building-blocks/langfuse/dspy-tracing/" class="md-nav__link">
         
   
   
@@ -1044,7 +1049,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../building-blocks/langfuse/langgraph-tracing.md" class="md-nav__link">
+      <a href="../../building-blocks/langfuse/langgraph-tracing/" class="md-nav__link">
         
   
   
@@ -1067,7 +1072,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../building-blocks/langfuse/manual-tracing.md" class="md-nav__link">
+      <a href="../../building-blocks/langfuse/manual-tracing/" class="md-nav__link">
         
   
   
@@ -1141,7 +1146,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../building-blocks/evalprotocol/overview.md" class="md-nav__link">
+      <a href="../../building-blocks/evalprotocol/overview/" class="md-nav__link">
         
   
   
@@ -1187,7 +1192,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../building-blocks/evalprotocol/langfuse-integration.md" class="md-nav__link">
+      <a href="../../building-blocks/evalprotocol/langfuse-integration/" class="md-nav__link">
         
   
   
@@ -1210,7 +1215,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../building-blocks/evalprotocol/langgraph-integration.md" class="md-nav__link">
+      <a href="../../building-blocks/evalprotocol/langgraph-integration/" class="md-nav__link">
         
   
   
@@ -1685,6 +1690,32 @@
   
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#one-universal-phase-abstraction" class="md-nav__link">
+    <span class="md-ellipsis">
+      One universal “phase” abstraction
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-define-a-phased-plan" class="md-nav__link">
+    <span class="md-ellipsis">
+      3) Define a phased plan
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -1698,8 +1729,6 @@
                   
 
 
-
-  <h1>Ma.tuning spec</h1>
 
 <p># mahsm.tuning — A single-module abstraction for SFT/DPO/RL/LoRA</p>
 <p>Status: Draft (for initial PR)</p>
@@ -1839,31 +1868,29 @@
  - <code>apply_policy(artefact)</code> — hot‑swap a graph policy (advanced/future).</p>
 <p>The apply functions use Mahsm’s existing DSPy/graph wrappers; no trainer coupling.</p>
 <hr />
-<p>## One universal “stage” abstraction</p>
+<h2 id="one-universal-phase-abstraction">One universal “phase” abstraction<a class="headerlink" href="#one-universal-phase-abstraction" title="Permanent link">&para;</a></h2>
 <p>A stage composes: source → curate → optimize → apply.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nd">@dataclass</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="k">class</span><span class="w"> </span><span class="nc">Source</span><span class="p">:</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    <span class="n">uri</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># e.g., live://graph/&lt;id&gt;, trace://langfuse/&lt;project&gt;/&lt;task&gt;, dataset://hf/&lt;name&gt;, replay://buffer</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="nd">@dataclass</span>
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="k">class</span><span class="w"> </span><span class="nc">Stage</span><span class="p">:</span>
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
-<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>    <span class="n">source</span><span class="p">:</span> <span class="n">Source</span>                      <span class="c1"># where experience comes from</span>
-<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>    <span class="n">curate</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">]</span>     <span class="c1"># to_sft / to_preferences / to_trajectories</span>
-<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>    <span class="n">optimize</span><span class="p">:</span> <span class="n">TrainerAdapter</span>            <span class="c1"># SFT / DPO / RL (via adapter)</span>
-<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>    <span class="n">apply</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Artefact</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span>   <span class="c1"># adapter://lora, model://version, policy://swap</span>
-<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>
-<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="nd">@dataclass</span>
-<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="k">class</span><span class="w"> </span><span class="nc">Plan</span><span class="p">:</span>
-<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>    <span class="n">stages</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Stage</span><span class="p">]</span>
-<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a>    <span class="n">guard</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># simple acceptance criteria, e.g., min metrics</span>
-<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a>
-<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="n">plan</span><span class="p">:</span> <span class="n">Plan</span><span class="p">):</span>
-<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a>    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">plan</span><span class="o">.</span><span class="n">stages</span><span class="p">:</span>
-<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a>        <span class="n">ds</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">curate</span><span class="p">(</span><span class="n">resolve</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">source</span><span class="p">))</span>
-<a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a>        <span class="n">artefact</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">optimize</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="p">{})</span>
-<a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a>        <span class="n">s</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">artefact</span><span class="p">)</span>
-</code></pre></div>
+<p>```python
+ @dataclass
+ class Source:
+     uri: str  # e.g., live://graph/<id>, trace://langfuse/<project>/<task>, dataset://hf/<name>, replay://buffer</p>
+<p>@dataclass
+class Phase:
+     name: str
+     source: Source                      # where experience comes from
+     curate: Callable[..., Iterable]     # to_sft / to_preferences / to_trajectories
+     optimize: TrainerAdapter            # SFT / DPO / RL (via adapter)
+     apply: Callable[[Artefact], None]   # adapter://lora, model://version, policy://swap</p>
+<p>@dataclass
+class Plan:
+     stages: list[Stage]
+     guard: dict | None = None  # simple acceptance criteria, e.g., min metrics</p>
+<p>def run(plan: Plan):
+    for p in plan.phases:
+        ds = p.curate(resolve(p.source))
+        artefact = p.optimize.fit(ds, config={})
+        p.apply(artefact)
+ ```</p>
 <p>This keeps all methods uniform. SFT is just <code>trace -&gt; to_sft -&gt; TRL_SFT -&gt; apply_lora</code>. Online RL is <code>live -&gt; to_trajectories -&gt; VERL_RL -&gt; apply_lora</code>.</p>
 <hr />
 <p>## Algorithm catalog (what each needs and how it plugs in)</p>
@@ -2029,45 +2056,42 @@
 <p>All of these reduce to choosing: source (traces/live) → curate (to_sft/to_preferences/to_trajectories) → optimize (adapter) → apply (LoRA/model).</p>
 <hr />
 <p>## Public API sketch (what users write)</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">mahsm</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ma</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">mahsm</span><span class="w"> </span><span class="kn">import</span> <span class="n">tuning</span> <span class="k">as</span> <span class="n">mt</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c1"># 1) Wrap existing graph (no changes to nodes)</span>
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="n">graph</span> <span class="o">=</span> <span class="n">build_graph_somewhere</span><span class="p">()</span>
-<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
-<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="c1"># 2) Start event collection (LangFuse is already set up in ma.tracing)</span>
-<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="n">collector</span> <span class="o">=</span> <span class="n">mt</span><span class="o">.</span><span class="n">collect_from</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="s2">&quot;proj1&quot;</span><span class="p">,</span> <span class="n">task</span><span class="o">=</span><span class="s2">&quot;codegen&quot;</span><span class="p">)</span>
-<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>
-<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="c1"># 3) Define a staged plan</span>
-<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="n">plan</span> <span class="o">=</span> <span class="n">mt</span><span class="o">.</span><span class="n">Plan</span><span class="p">(</span>
-<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>    <span class="n">stages</span><span class="o">=</span><span class="p">[</span>
-<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>        <span class="n">mt</span><span class="o">.</span><span class="n">Stage</span><span class="p">(</span>
-<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;bootstrap-sft&quot;</span><span class="p">,</span>
-<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a>            <span class="n">source</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">Source</span><span class="p">(</span><span class="s2">&quot;trace://langfuse/proj1/codegen&quot;</span><span class="p">),</span>
-<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a>            <span class="n">curate</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">to_sft</span><span class="p">,</span>
-<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a>            <span class="n">optimize</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">TRL_SFT</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;Qwen/Qwen2.5-7B&quot;</span><span class="p">,</span> <span class="n">lora</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
-<a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a>            <span class="n">apply</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">apply_lora</span><span class="p">,</span>
-<a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a>        <span class="p">),</span>
-<a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a>        <span class="n">mt</span><span class="o">.</span><span class="n">Stage</span><span class="p">(</span>
-<a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a>            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;align-dpo&quot;</span><span class="p">,</span>
-<a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a>            <span class="n">source</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">Source</span><span class="p">(</span><span class="s2">&quot;trace://langfuse/proj1/codegen&quot;</span><span class="p">),</span>
-<a id="__codelineno-6-23" name="__codelineno-6-23" href="#__codelineno-6-23"></a>            <span class="n">curate</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">to_preferences</span><span class="p">,</span>
-<a id="__codelineno-6-24" name="__codelineno-6-24" href="#__codelineno-6-24"></a>            <span class="n">optimize</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">TRL_DPO</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;Qwen/Qwen2.5-7B&quot;</span><span class="p">,</span> <span class="n">lora</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
-<a id="__codelineno-6-25" name="__codelineno-6-25" href="#__codelineno-6-25"></a>            <span class="n">apply</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">apply_lora</span><span class="p">,</span>
-<a id="__codelineno-6-26" name="__codelineno-6-26" href="#__codelineno-6-26"></a>        <span class="p">),</span>
-<a id="__codelineno-6-27" name="__codelineno-6-27" href="#__codelineno-6-27"></a>        <span class="n">mt</span><span class="o">.</span><span class="n">Stage</span><span class="p">(</span>
-<a id="__codelineno-6-28" name="__codelineno-6-28" href="#__codelineno-6-28"></a>            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;online-rl&quot;</span><span class="p">,</span>
-<a id="__codelineno-6-29" name="__codelineno-6-29" href="#__codelineno-6-29"></a>            <span class="n">source</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">Source</span><span class="p">(</span><span class="s2">&quot;live://graph/codegen&quot;</span><span class="p">),</span>
-<a id="__codelineno-6-30" name="__codelineno-6-30" href="#__codelineno-6-30"></a>            <span class="n">curate</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">to_trajectories</span><span class="p">,</span>
-<a id="__codelineno-6-31" name="__codelineno-6-31" href="#__codelineno-6-31"></a>            <span class="n">optimize</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">VERL_RL</span><span class="p">(</span><span class="n">endpoint</span><span class="o">=</span><span class="s2">&quot;http://trainer:8080&quot;</span><span class="p">),</span>
-<a id="__codelineno-6-32" name="__codelineno-6-32" href="#__codelineno-6-32"></a>            <span class="n">apply</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">apply_lora</span><span class="p">,</span>
-<a id="__codelineno-6-33" name="__codelineno-6-33" href="#__codelineno-6-33"></a>        <span class="p">),</span>
-<a id="__codelineno-6-34" name="__codelineno-6-34" href="#__codelineno-6-34"></a>    <span class="p">],</span>
-<a id="__codelineno-6-35" name="__codelineno-6-35" href="#__codelineno-6-35"></a>    <span class="n">guard</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;qa.accuracy&quot;</span><span class="p">:</span> <span class="mf">0.9</span><span class="p">},</span>
-<a id="__codelineno-6-36" name="__codelineno-6-36" href="#__codelineno-6-36"></a><span class="p">)</span>
-<a id="__codelineno-6-37" name="__codelineno-6-37" href="#__codelineno-6-37"></a>
-<a id="__codelineno-6-38" name="__codelineno-6-38" href="#__codelineno-6-38"></a><span class="n">mt</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">plan</span><span class="p">)</span>
-</code></pre></div>
+<p>```python
+ import mahsm as ma
+ from mahsm import tuning as mt</p>
+<p># 1) Wrap existing graph (no changes to nodes)
+ graph = build_graph_somewhere()</p>
+<p># 2) Start event collection (LangFuse is already set up in ma.tracing)
+ collector = mt.collect_from(graph, project="proj1", task="codegen")</p>
+<h1 id="3-define-a-phased-plan">3) Define a phased plan<a class="headerlink" href="#3-define-a-phased-plan" title="Permanent link">&para;</a></h1>
+<p>plan = mt.Plan(
+    phases=[
+        mt.Phase(
+             name="bootstrap-sft",
+             source=mt.Source("trace://langfuse/proj1/codegen"),
+             curate=mt.to_sft,
+             optimize=mt.TRL_SFT(model="Qwen/Qwen2.5-7B", lora=True),
+             apply=mt.apply_lora,
+         ),
+        mt.Phase(
+             name="align-dpo",
+             source=mt.Source("trace://langfuse/proj1/codegen"),
+             curate=mt.to_preferences,
+             optimize=mt.TRL_DPO(model="Qwen/Qwen2.5-7B", lora=True),
+             apply=mt.apply_lora,
+         ),
+        mt.Phase(
+             name="online-rl",
+             source=mt.Source("live://graph/codegen"),
+             curate=mt.to_trajectories,
+             optimize=mt.VERL_RL(endpoint="http://trainer:8080"),
+             apply=mt.apply_lora,
+         ),
+     ],
+     guard={"qa.accuracy": 0.9},
+ )</p>
+<p>mt.run(plan)
+ ```</p>
 <hr />
 <p>## Integration points in mahsm today</p>
 <ul>
@@ -2146,7 +2170,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="November 1, 2025 04:54:57 UTC"><span class="timeago" datetime="2025-11-01T04:54:57+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="November 1, 2025 04:54:57 UTC">2025-11-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="November 1, 2025 06:26:19 UTC"><span class="timeago" datetime="2025-11-01T06:26:19+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="November 1, 2025 06:26:19 UTC">2025-11-01</span>
   </span>
 
     

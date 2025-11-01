@@ -29,6 +29,42 @@
          <lastmod>2025-11-01</lastmod>
     </url>
     <url>
+         <loc>https://chimera-research.github.io/mahsm/building-blocks/evalprotocol/eval-tests/</loc>
+         <lastmod>2025-11-01</lastmod>
+    </url>
+    <url>
+         <loc>https://chimera-research.github.io/mahsm/building-blocks/evalprotocol/langfuse-integration/</loc>
+         <lastmod>2025-11-01</lastmod>
+    </url>
+    <url>
+         <loc>https://chimera-research.github.io/mahsm/building-blocks/evalprotocol/langgraph-integration/</loc>
+         <lastmod>2025-11-01</lastmod>
+    </url>
+    <url>
+         <loc>https://chimera-research.github.io/mahsm/building-blocks/evalprotocol/overview/</loc>
+         <lastmod>2025-11-01</lastmod>
+    </url>
+    <url>
+         <loc>https://chimera-research.github.io/mahsm/building-blocks/langfuse/dspy-tracing/</loc>
+         <lastmod>2025-11-01</lastmod>
+    </url>
+    <url>
+         <loc>https://chimera-research.github.io/mahsm/building-blocks/langfuse/initialization/</loc>
+         <lastmod>2025-11-01</lastmod>
+    </url>
+    <url>
+         <loc>https://chimera-research.github.io/mahsm/building-blocks/langfuse/langgraph-tracing/</loc>
+         <lastmod>2025-11-01</lastmod>
+    </url>
+    <url>
+         <loc>https://chimera-research.github.io/mahsm/building-blocks/langfuse/manual-tracing/</loc>
+         <lastmod>2025-11-01</lastmod>
+    </url>
+    <url>
+         <loc>https://chimera-research.github.io/mahsm/building-blocks/langfuse/overview/</loc>
+         <lastmod>2025-11-01</lastmod>
+    </url>
+    <url>
          <loc>https://chimera-research.github.io/mahsm/building-blocks/langgraph/compilation/</loc>
          <lastmod>2025-11-01</lastmod>
     </url>

@@ -1,0 +1,3125 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A Declarative Framework for Building Production-Grade AI Systems">
+      
+      
+        <meta name="author" content="Sohum Kothavade">
+      
+      
+        <link rel="canonical" href="https://chimera-research.github.io/mahsm/building-blocks/langfuse/overview/">
+      
+      
+        <link rel="prev" href="../../langgraph/visualization/">
+      
+      
+        <link rel="next" href="../initialization/">
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.22">
+    
+    
+      
+        <title>Overview - mahsm v0.1.0</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.84d31ad4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../../../css/timeago.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#langfuse-overview" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="mahsm v0.1.0" class="md-header__button md-logo" aria-label="mahsm v0.1.0" data-md-component="logo">
+      
+  <img src="../../../assets/logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            mahsm v0.1.0
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Overview
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/chimera-research/mahsm" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    chimera-research/mahsm
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../getting-started/installation/" class="md-tabs__link">
+          
+  
+  
+  Getting Started
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../dspy/overview/" class="md-tabs__link">
+          
+  
+  
+  Building Blocks
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../guides/first-agent.md" class="md-tabs__link">
+          
+  
+  
+  Guides
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../examples/basic-qa.md" class="md-tabs__link">
+          
+  
+  
+  Examples
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../api/core.md" class="md-tabs__link">
+          
+  
+  
+  API Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="mahsm v0.1.0" class="md-nav__button md-logo" aria-label="mahsm v0.1.0" data-md-component="logo">
+      
+  <img src="../../../assets/logo.svg" alt="logo">
+
+    </a>
+    mahsm v0.1.0
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/chimera-research/mahsm" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    chimera-research/mahsm
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Getting Started
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Getting Started
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Installation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Quick Start
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/core-concepts.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Core Concepts
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    Building Blocks
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Building Blocks
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    DSPy
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            DSPy
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dspy/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dspy/signatures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Signatures
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dspy/modules/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Modules
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dspy/optimizers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Optimizers
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dspy/best-practices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Best Practices
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    LangGraph
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            LangGraph
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langgraph/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langgraph/state/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    State Management
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langgraph/nodes-edges/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Nodes & Edges
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langgraph/conditional-routing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Conditional Routing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langgraph/compilation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Compilation & Execution
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langgraph/visualization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Visualization
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    Langfuse (Tracing)
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            Langfuse (Tracing)
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-langfuse" class="md-nav__link">
+    <span class="md-ellipsis">
+      What is Langfuse?
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-use-langfuse" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why Use Langfuse?
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Why Use Langfuse?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#without-langfuse" class="md-nav__link">
+    <span class="md-ellipsis">
+      Without Langfuse
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#with-langfuse" class="md-nav__link">
+    <span class="md-ellipsis">
+      With Langfuse
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-concepts" class="md-nav__link">
+    <span class="md-ellipsis">
+      Key Concepts
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Concepts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#traces" class="md-nav__link">
+    <span class="md-ellipsis">
+      Traces
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#spans" class="md-nav__link">
+    <span class="md-ellipsis">
+      Spans
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Generations
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hierarchy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Hierarchy
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mahsm-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      mahsm Integration
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mahsm Integration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#automatic-tracing" class="md-nav__link">
+    <span class="md-ellipsis">
+      Automatic Tracing
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-gets-traced" class="md-nav__link">
+    <span class="md-ellipsis">
+      What Gets Traced?
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What Gets Traced?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dspy-modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      DSPy Modules
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#langgraph-workflows" class="md-nav__link">
+    <span class="md-ellipsis">
+      LangGraph Workflows
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#manual-spans" class="md-nav__link">
+    <span class="md-ellipsis">
+      Manual Spans
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-langfuse-ui" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Langfuse UI
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The Langfuse UI">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dashboard
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#trace-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      Trace Details
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#analytics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Analytics
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#when-to-use-langfuse" class="md-nav__link">
+    <span class="md-ellipsis">
+      When to Use Langfuse
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="When to Use Langfuse">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#development" class="md-nav__link">
+    <span class="md-ellipsis">
+      Development ✅
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#production" class="md-nav__link">
+    <span class="md-ellipsis">
+      Production ✅
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Optimization ✅
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setup-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      Setup Options
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Setup Options">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#langfuse-cloud-easiest" class="md-nav__link">
+    <span class="md-ellipsis">
+      Langfuse Cloud (Easiest)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#self-hosted" class="md-nav__link">
+    <span class="md-ellipsis">
+      Self-Hosted
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configuration
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic" class="md-nav__link">
+    <span class="md-ellipsis">
+      Basic
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#explicit" class="md-nav__link">
+    <span class="md-ellipsis">
+      Explicit
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#with-metadata" class="md-nav__link">
+    <span class="md-ellipsis">
+      With Metadata
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#complete-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      Complete Example
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#benefits" class="md-nav__link">
+    <span class="md-ellipsis">
+      Benefits
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Benefits">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#debugging" class="md-nav__link">
+    <span class="md-ellipsis">
+      🐛 Debugging
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cost-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      💰 Cost Management
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#performance" class="md-nav__link">
+    <span class="md-ellipsis">
+      ⚡ Performance
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#analytics_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      📊 Analytics
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#best-practices" class="md-nav__link">
+    <span class="md-ellipsis">
+      Best Practices
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Best Practices">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#do" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Do:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dont" class="md-nav__link">
+    <span class="md-ellipsis">
+      ❌ Don't:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      Next Steps
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#external-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      External Resources
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../initialization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Initialization
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dspy-tracing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    DSPy Tracing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../langgraph-tracing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    LangGraph Tracing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../manual-tracing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Manual Tracing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    EvalProtocol
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            EvalProtocol
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../evalprotocol/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../evalprotocol/evaluation-tests.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Evaluation Tests
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../evalprotocol/langfuse-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Langfuse Integration
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../evalprotocol/langgraph-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    LangGraph Integration
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Guides
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Guides
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../guides/first-agent.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Your First Agent
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../guides/multi-agent-systems.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Multi-Agent Systems
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../guides/adding-tools.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Adding Tools
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../guides/optimization-workflow.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Optimization Workflow
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../guides/production-deployment.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Production Deployment
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Examples
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Examples
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../examples/basic-qa.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Basic Q&A
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../examples/research-agent.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Research Agent
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../examples/multi-hop-reasoning.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Multi-Hop Reasoning
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../examples/evaluation-pipeline.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Evaluation Pipeline
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    API Reference
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            API Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api/core.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    mahsm.core
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api/tracing.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    mahsm.tracing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api/testing.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    mahsm.testing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-langfuse" class="md-nav__link">
+    <span class="md-ellipsis">
+      What is Langfuse?
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-use-langfuse" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why Use Langfuse?
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Why Use Langfuse?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#without-langfuse" class="md-nav__link">
+    <span class="md-ellipsis">
+      Without Langfuse
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#with-langfuse" class="md-nav__link">
+    <span class="md-ellipsis">
+      With Langfuse
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-concepts" class="md-nav__link">
+    <span class="md-ellipsis">
+      Key Concepts
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Concepts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#traces" class="md-nav__link">
+    <span class="md-ellipsis">
+      Traces
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#spans" class="md-nav__link">
+    <span class="md-ellipsis">
+      Spans
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Generations
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hierarchy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Hierarchy
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mahsm-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      mahsm Integration
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mahsm Integration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#automatic-tracing" class="md-nav__link">
+    <span class="md-ellipsis">
+      Automatic Tracing
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-gets-traced" class="md-nav__link">
+    <span class="md-ellipsis">
+      What Gets Traced?
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What Gets Traced?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dspy-modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      DSPy Modules
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#langgraph-workflows" class="md-nav__link">
+    <span class="md-ellipsis">
+      LangGraph Workflows
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#manual-spans" class="md-nav__link">
+    <span class="md-ellipsis">
+      Manual Spans
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-langfuse-ui" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Langfuse UI
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The Langfuse UI">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dashboard
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#trace-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      Trace Details
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#analytics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Analytics
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#when-to-use-langfuse" class="md-nav__link">
+    <span class="md-ellipsis">
+      When to Use Langfuse
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="When to Use Langfuse">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#development" class="md-nav__link">
+    <span class="md-ellipsis">
+      Development ✅
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#production" class="md-nav__link">
+    <span class="md-ellipsis">
+      Production ✅
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Optimization ✅
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setup-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      Setup Options
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Setup Options">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#langfuse-cloud-easiest" class="md-nav__link">
+    <span class="md-ellipsis">
+      Langfuse Cloud (Easiest)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#self-hosted" class="md-nav__link">
+    <span class="md-ellipsis">
+      Self-Hosted
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configuration
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic" class="md-nav__link">
+    <span class="md-ellipsis">
+      Basic
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#explicit" class="md-nav__link">
+    <span class="md-ellipsis">
+      Explicit
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#with-metadata" class="md-nav__link">
+    <span class="md-ellipsis">
+      With Metadata
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#complete-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      Complete Example
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#benefits" class="md-nav__link">
+    <span class="md-ellipsis">
+      Benefits
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Benefits">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#debugging" class="md-nav__link">
+    <span class="md-ellipsis">
+      🐛 Debugging
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cost-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      💰 Cost Management
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#performance" class="md-nav__link">
+    <span class="md-ellipsis">
+      ⚡ Performance
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#analytics_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      📊 Analytics
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#best-practices" class="md-nav__link">
+    <span class="md-ellipsis">
+      Best Practices
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Best Practices">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#do" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Do:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dont" class="md-nav__link">
+    <span class="md-ellipsis">
+      ❌ Don't:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      Next Steps
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#external-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      External Resources
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="langfuse-overview">Langfuse Overview<a class="headerlink" href="#langfuse-overview" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p><strong>TL;DR</strong>: Langfuse provides observability for AI applications—trace LLM calls, debug workflows, analyze costs, and improve performance.</p>
+</blockquote>
+<h2 id="what-is-langfuse">What is Langfuse?<a class="headerlink" href="#what-is-langfuse" title="Permanent link">&para;</a></h2>
+<p><strong>Langfuse</strong> is an open-source observability platform for LLM applications. It helps you:</p>
+<ul>
+<li><strong>Trace</strong> every LLM call and agent step</li>
+<li><strong>Debug</strong> issues in production</li>
+<li><strong>Analyze</strong> performance and costs</li>
+<li><strong>Monitor</strong> quality over time</li>
+<li><strong>Optimize</strong> prompts based on real data</li>
+</ul>
+<p>Think of it as <strong>your eyes into what your AI agent is actually doing</strong>.</p>
+<hr />
+<h2 id="why-use-langfuse">Why Use Langfuse?<a class="headerlink" href="#why-use-langfuse" title="Permanent link">&para;</a></h2>
+<h3 id="without-langfuse">Without Langfuse<a class="headerlink" href="#without-langfuse" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># You only see the final result</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">result</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;Build a web scraper&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>  <span class="c1"># ✅ or ❌ ?</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="c1"># Questions you can&#39;t answer:</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="c1"># - Which LLM calls were made?</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1"># - How much did it cost?</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="c1"># - Where did it fail?</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="c1"># - How long did each step take?</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="c1"># - What were the exact prompts?</span>
+</code></pre></div>
+<h3 id="with-langfuse">With Langfuse<a class="headerlink" href="#with-langfuse" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">ma</span><span class="o">.</span><span class="n">tracing</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>  <span class="c1"># One line!</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">result</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;Build a web scraper&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="c1"># Now you can see:</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="c1"># ✅ Every LLM call with prompts and responses</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="c1"># ✅ Total cost: $0.0042</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="c1"># ✅ Latency: 2.3s (breakdown by step)</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="c1"># ✅ Full execution trace in beautiful UI</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="c1"># ✅ Token usage per call</span>
+</code></pre></div>
+<hr />
+<h2 id="key-concepts">Key Concepts<a class="headerlink" href="#key-concepts" title="Permanent link">&para;</a></h2>
+<h3 id="traces">Traces<a class="headerlink" href="#traces" title="Permanent link">&para;</a></h3>
+<p>A <strong>trace</strong> represents one complete execution:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>Trace: &quot;Build a web scraper&quot;
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>├─ Generation: Plan creation (0.8s, $0.001)
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>├─ Generation: Code generation (1.2s, $0.002)
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>└─ Generation: Documentation (0.3s, $0.001)
+</code></pre></div>
+<p>Every agent execution gets one trace.</p>
+<h3 id="spans">Spans<a class="headerlink" href="#spans" title="Permanent link">&para;</a></h3>
+<p><strong>Spans</strong> are steps within a trace:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Trace: QA Pipeline
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>├─ Span: Classify question
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>│  └─ Generation: LLM classification
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>├─ Span: Research
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>│  ├─ Generation: Query generation
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>│  └─ Generation: Summarization
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>└─ Span: Final answer
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>   └─ Generation: Answer synthesis
+</code></pre></div>
+<p>Spans represent logical steps (nodes in your workflow).</p>
+<h3 id="generations">Generations<a class="headerlink" href="#generations" title="Permanent link">&para;</a></h3>
+<p><strong>Generations</strong> are individual LLM calls:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Generation
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>├─ Model: gpt-4o-mini
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>├─ Prompt: &quot;Classify: What is Python?&quot;
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>├─ Response: &quot;Category: programming&quot;
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>├─ Tokens: 20 input, 5 output
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>├─ Cost: $0.0001
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>└─ Latency: 234ms
+</code></pre></div>
+<p>Every time you call an LLM, Langfuse captures it.</p>
+<hr />
+<h2 id="hierarchy">Hierarchy<a class="headerlink" href="#hierarchy" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>Trace (Execution)
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>  └─ Span (Workflow Step / Node)
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>      └─ Generation (LLM Call)
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>          └─ Prompt &amp; Response
+</code></pre></div>
+<p><strong>Example:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>Trace: &quot;Research quantum physics&quot;
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>  └─ Span: Research Agent
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>      ├─ Generation: Generate search query
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>      ├─ Generation: Summarize results
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>      └─ Generation: Create final answer
+</code></pre></div></p>
+<hr />
+<h2 id="mahsm-integration">mahsm Integration<a class="headerlink" href="#mahsm-integration" title="Permanent link">&para;</a></h2>
+<p>mahsm makes Langfuse integration <strong>automatic and seamless</strong>.</p>
+<h3 id="automatic-tracing">Automatic Tracing<a class="headerlink" href="#automatic-tracing" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">mahsm</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ma</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">dspy</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="c1"># 1. Initialize once</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="n">ma</span><span class="o">.</span><span class="n">tracing</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="c1"># 2. Build your agent</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="nd">@ma</span><span class="o">.</span><span class="n">dspy_node</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="k">class</span><span class="w"> </span><span class="nc">QA</span><span class="p">(</span><span class="n">ma</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">qa</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span><span class="s2">&quot;question -&gt; answer&quot;</span><span class="p">)</span>
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question</span><span class="p">):</span>
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">qa</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">)</span>
+<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>
+<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a><span class="c1"># 3. Run - automatic tracing!</span>
+<a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a><span class="n">qa</span> <span class="o">=</span> <span class="n">QA</span><span class="p">()</span>
+<a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a><span class="n">result</span> <span class="o">=</span> <span class="n">qa</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="s2">&quot;What is Python?&quot;</span><span class="p">)</span>
+<a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a>
+<a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a><span class="c1"># 🎉 Everything is automatically traced in Langfuse!</span>
+</code></pre></div>
+<p><strong>No manual instrumentation needed!</strong></p>
+<hr />
+<h2 id="what-gets-traced">What Gets Traced?<a class="headerlink" href="#what-gets-traced" title="Permanent link">&para;</a></h2>
+<h3 id="dspy-modules">DSPy Modules<a class="headerlink" href="#dspy-modules" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nd">@ma</span><span class="o">.</span><span class="n">dspy_node</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="k">class</span><span class="w"> </span><span class="nc">MyModule</span><span class="p">(</span><span class="n">ma</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">):</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>        <span class="c1"># All LLM calls here are traced</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>        <span class="k">return</span> <span class="n">result</span>
+</code></pre></div>
+<p><strong>Automatically traced:</strong>
+- Module name
+- Input parameters
+- Output values
+- All internal LLM calls
+- Token usage and costs
+- Latency</p>
+<h3 id="langgraph-workflows">LangGraph Workflows<a class="headerlink" href="#langgraph-workflows" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="n">workflow</span> <span class="o">=</span> <span class="n">ma</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">StateGraph</span><span class="p">(</span><span class="n">State</span><span class="p">)</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="n">workflow</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;step1&quot;</span><span class="p">,</span> <span class="n">step1</span><span class="p">)</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="n">workflow</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;step2&quot;</span><span class="p">,</span> <span class="n">step2</span><span class="p">)</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="n">graph</span> <span class="o">=</span> <span class="n">workflow</span><span class="o">.</span><span class="n">compile</span><span class="p">()</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="c1"># All nodes and state transitions traced</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="n">result</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">invoke</span><span class="p">({</span><span class="s2">&quot;input&quot;</span><span class="p">:</span> <span class="s2">&quot;data&quot;</span><span class="p">})</span>
+</code></pre></div>
+<p><strong>Automatically traced:</strong>
+- Node execution order
+- State at each step
+- Conditional routing decisions
+- Total workflow time
+- All LLM calls within nodes</p>
+<h3 id="manual-spans">Manual Spans<a class="headerlink" href="#manual-spans" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nd">@ma</span><span class="o">.</span><span class="n">tracing</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Custom Logic&quot;</span><span class="p">)</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">my_function</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>    <span class="c1"># Custom span for non-LLM work</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>    <span class="k">return</span> <span class="n">process</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</code></pre></div>
+<hr />
+<h2 id="the-langfuse-ui">The Langfuse UI<a class="headerlink" href="#the-langfuse-ui" title="Permanent link">&para;</a></h2>
+<h3 id="dashboard">Dashboard<a class="headerlink" href="#dashboard" title="Permanent link">&para;</a></h3>
+<p>See all your traces:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>Recent Traces
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>┌─────────────────────────────────────────────────┐
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>│ Time    │ Name           │ Status │ Cost    │ Latency │
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>├─────────────────────────────────────────────────┤
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>│ 14:32   │ Research Task  │ ✅     │ $0.034  │ 3.2s    │
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>│ 14:30   │ QA Request     │ ✅     │ $0.002  │ 0.8s    │
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>│ 14:28   │ Code Gen       │ ❌     │ $0.015  │ 5.1s    │
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>└─────────────────────────────────────────────────┘
+</code></pre></div>
+<h3 id="trace-details">Trace Details<a class="headerlink" href="#trace-details" title="Permanent link">&para;</a></h3>
+<p>Click any trace to see:</p>
+<ol>
+<li><strong>Timeline</strong> - Visual execution flow</li>
+<li><strong>Generations</strong> - Every LLM call</li>
+<li><strong>Metadata</strong> - Costs, tokens, latency</li>
+<li><strong>I/O</strong> - Inputs and outputs at each step</li>
+</ol>
+<h3 id="analytics">Analytics<a class="headerlink" href="#analytics" title="Permanent link">&para;</a></h3>
+<p>Track over time:
+- Total costs
+- Average latency
+- Success rates
+- Token usage
+- Model distribution</p>
+<hr />
+<h2 id="when-to-use-langfuse">When to Use Langfuse<a class="headerlink" href="#when-to-use-langfuse" title="Permanent link">&para;</a></h2>
+<h3 id="development">Development ✅<a class="headerlink" href="#development" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1"># Debug locally</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="n">ma</span><span class="o">.</span><span class="n">tracing</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="c1"># Run your agent</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="n">result</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="c1"># Check Langfuse UI to see what happened</span>
+</code></pre></div>
+<h3 id="production">Production ✅<a class="headerlink" href="#production" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># Monitor in production</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="n">ma</span><span class="o">.</span><span class="n">tracing</span><span class="o">.</span><span class="n">init</span><span class="p">(</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>    <span class="n">public_key</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;LANGFUSE_PUBLIC_KEY&quot;</span><span class="p">),</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>    <span class="n">secret_key</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;LANGFUSE_SECRET_KEY&quot;</span><span class="p">)</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="p">)</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="c1"># All production traffic is traced</span>
+</code></pre></div>
+<h3 id="optimization">Optimization ✅<a class="headerlink" href="#optimization" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># Trace before and after optimization</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="n">ma</span><span class="o">.</span><span class="n">tracing</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="c1"># Compare costs, latency, quality</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="c1"># Make data-driven decisions</span>
+</code></pre></div>
+<hr />
+<h2 id="setup-options">Setup Options<a class="headerlink" href="#setup-options" title="Permanent link">&para;</a></h2>
+<h3 id="langfuse-cloud-easiest">Langfuse Cloud (Easiest)<a class="headerlink" href="#langfuse-cloud-easiest" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Sign up at <a href="https://cloud.langfuse.com">cloud.langfuse.com</a></li>
+<li>Get API keys</li>
+<li>Done!</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="n">ma</span><span class="o">.</span><span class="n">tracing</span><span class="o">.</span><span class="n">init</span><span class="p">(</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>    <span class="n">public_key</span><span class="o">=</span><span class="s2">&quot;YOUR_LANGFUSE_PUBLIC_KEY&quot;</span><span class="p">,</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>    <span class="n">secret_key</span><span class="o">=</span><span class="s2">&quot;YOUR_LANGFUSE_SECRET_KEY&quot;</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="p">)</span>
+</code></pre></div>
+<h3 id="self-hosted">Self-Hosted<a class="headerlink" href="#self-hosted" title="Permanent link">&para;</a></h3>
+<p>Run Langfuse locally:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/langfuse/langfuse.git
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="nb">cd</span><span class="w"> </span>langfuse
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>docker-compose<span class="w"> </span>up
+</code></pre></div>
+<p>Then:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="n">ma</span><span class="o">.</span><span class="n">tracing</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s2">&quot;http://localhost:3000&quot;</span><span class="p">)</span>
+</code></pre></div></p>
+<hr />
+<h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
+<h3 id="basic">Basic<a class="headerlink" href="#basic" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="n">ma</span><span class="o">.</span><span class="n">tracing</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+</code></pre></div>
+<p>Uses environment variables:
+- <code>LANGFUSE_PUBLIC_KEY</code>
+- <code>LANGFUSE_SECRET_KEY</code>
+- <code>LANGFUSE_HOST</code> (optional)</p>
+<h3 id="explicit">Explicit<a class="headerlink" href="#explicit" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="n">ma</span><span class="o">.</span><span class="n">tracing</span><span class="o">.</span><span class="n">init</span><span class="p">(</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>    <span class="n">public_key</span><span class="o">=</span><span class="s2">&quot;pk-lf-...&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>    <span class="n">secret_key</span><span class="o">=</span><span class="s2">&quot;sk-lf-...&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>    <span class="n">host</span><span class="o">=</span><span class="s2">&quot;https://cloud.langfuse.com&quot;</span>
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="p">)</span>
+</code></pre></div>
+<h3 id="with-metadata">With Metadata<a class="headerlink" href="#with-metadata" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="n">ma</span><span class="o">.</span><span class="n">tracing</span><span class="o">.</span><span class="n">init</span><span class="p">(</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>    <span class="n">public_key</span><span class="o">=</span><span class="s2">&quot;YOUR_PUBLIC_KEY&quot;</span><span class="p">,</span>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>    <span class="n">secret_key</span><span class="o">=</span><span class="s2">&quot;YOUR_SECRET_KEY&quot;</span><span class="p">,</span>
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a>    <span class="n">session_id</span><span class="o">=</span><span class="s2">&quot;user-123&quot;</span><span class="p">,</span>
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a>    <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;production&quot;</span><span class="p">,</span> <span class="s2">&quot;api-v2&quot;</span><span class="p">]</span>
+<a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a><span class="p">)</span>
+</code></pre></div>
+<hr />
+<h2 id="complete-example">Complete Example<a class="headerlink" href="#complete-example" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">mahsm</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ma</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TypedDict</span><span class="p">,</span> <span class="n">Optional</span>
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">dspy</span>
+<a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a>
+<a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a><span class="c1"># Configure DSPy</span>
+<a id="__codelineno-21-7" name="__codelineno-21-7" href="#__codelineno-21-7"></a><span class="n">lm</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">LM</span><span class="p">(</span><span class="s1">&#39;openai/gpt-4o-mini&#39;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;OPENAI_API_KEY&quot;</span><span class="p">))</span>
+<a id="__codelineno-21-8" name="__codelineno-21-8" href="#__codelineno-21-8"></a><span class="n">dspy</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="n">lm</span><span class="p">)</span>
+<a id="__codelineno-21-9" name="__codelineno-21-9" href="#__codelineno-21-9"></a>
+<a id="__codelineno-21-10" name="__codelineno-21-10" href="#__codelineno-21-10"></a><span class="c1"># Initialize Langfuse tracing</span>
+<a id="__codelineno-21-11" name="__codelineno-21-11" href="#__codelineno-21-11"></a><span class="n">ma</span><span class="o">.</span><span class="n">tracing</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+<a id="__codelineno-21-12" name="__codelineno-21-12" href="#__codelineno-21-12"></a>
+<a id="__codelineno-21-13" name="__codelineno-21-13" href="#__codelineno-21-13"></a><span class="c1"># Define state</span>
+<a id="__codelineno-21-14" name="__codelineno-21-14" href="#__codelineno-21-14"></a><span class="k">class</span><span class="w"> </span><span class="nc">QAState</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+<a id="__codelineno-21-15" name="__codelineno-21-15" href="#__codelineno-21-15"></a>    <span class="n">question</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-21-16" name="__codelineno-21-16" href="#__codelineno-21-16"></a>    <span class="n">answer</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+<a id="__codelineno-21-17" name="__codelineno-21-17" href="#__codelineno-21-17"></a>
+<a id="__codelineno-21-18" name="__codelineno-21-18" href="#__codelineno-21-18"></a><span class="c1"># Create DSPy module</span>
+<a id="__codelineno-21-19" name="__codelineno-21-19" href="#__codelineno-21-19"></a><span class="nd">@ma</span><span class="o">.</span><span class="n">dspy_node</span>
+<a id="__codelineno-21-20" name="__codelineno-21-20" href="#__codelineno-21-20"></a><span class="k">class</span><span class="w"> </span><span class="nc">QA</span><span class="p">(</span><span class="n">ma</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<a id="__codelineno-21-21" name="__codelineno-21-21" href="#__codelineno-21-21"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a id="__codelineno-21-22" name="__codelineno-21-22" href="#__codelineno-21-22"></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+<a id="__codelineno-21-23" name="__codelineno-21-23" href="#__codelineno-21-23"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">qa</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span><span class="s2">&quot;question -&gt; answer&quot;</span><span class="p">)</span>
+<a id="__codelineno-21-24" name="__codelineno-21-24" href="#__codelineno-21-24"></a>
+<a id="__codelineno-21-25" name="__codelineno-21-25" href="#__codelineno-21-25"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question</span><span class="p">):</span>
+<a id="__codelineno-21-26" name="__codelineno-21-26" href="#__codelineno-21-26"></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">qa</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">)</span>
+<a id="__codelineno-21-27" name="__codelineno-21-27" href="#__codelineno-21-27"></a>
+<a id="__codelineno-21-28" name="__codelineno-21-28" href="#__codelineno-21-28"></a><span class="c1"># Build workflow</span>
+<a id="__codelineno-21-29" name="__codelineno-21-29" href="#__codelineno-21-29"></a><span class="n">workflow</span> <span class="o">=</span> <span class="n">ma</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">StateGraph</span><span class="p">(</span><span class="n">QAState</span><span class="p">)</span>
+<a id="__codelineno-21-30" name="__codelineno-21-30" href="#__codelineno-21-30"></a><span class="n">workflow</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;qa&quot;</span><span class="p">,</span> <span class="n">QA</span><span class="p">())</span>
+<a id="__codelineno-21-31" name="__codelineno-21-31" href="#__codelineno-21-31"></a><span class="n">workflow</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">ma</span><span class="o">.</span><span class="n">START</span><span class="p">,</span> <span class="s2">&quot;qa&quot;</span><span class="p">)</span>
+<a id="__codelineno-21-32" name="__codelineno-21-32" href="#__codelineno-21-32"></a><span class="n">workflow</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;qa&quot;</span><span class="p">,</span> <span class="n">ma</span><span class="o">.</span><span class="n">END</span><span class="p">)</span>
+<a id="__codelineno-21-33" name="__codelineno-21-33" href="#__codelineno-21-33"></a>
+<a id="__codelineno-21-34" name="__codelineno-21-34" href="#__codelineno-21-34"></a><span class="n">graph</span> <span class="o">=</span> <span class="n">workflow</span><span class="o">.</span><span class="n">compile</span><span class="p">()</span>
+<a id="__codelineno-21-35" name="__codelineno-21-35" href="#__codelineno-21-35"></a>
+<a id="__codelineno-21-36" name="__codelineno-21-36" href="#__codelineno-21-36"></a><span class="c1"># Run - automatically traced!</span>
+<a id="__codelineno-21-37" name="__codelineno-21-37" href="#__codelineno-21-37"></a><span class="n">result</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">invoke</span><span class="p">({</span><span class="s2">&quot;question&quot;</span><span class="p">:</span> <span class="s2">&quot;What is machine learning?&quot;</span><span class="p">})</span>
+<a id="__codelineno-21-38" name="__codelineno-21-38" href="#__codelineno-21-38"></a>
+<a id="__codelineno-21-39" name="__codelineno-21-39" href="#__codelineno-21-39"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Answer: </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;answer&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-21-40" name="__codelineno-21-40" href="#__codelineno-21-40"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">✨ Check Langfuse UI to see the full trace!&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>In Langfuse UI you'll see:</strong>
+- Trace: "QA Pipeline"
+  - Span: "qa" node
+    - Generation: ChainOfThought call
+      - Prompt: "question -&gt; answer"
+      - Input: "What is machine learning?"
+      - Output: [Complete answer]
+      - Cost: $0.0015
+      - Latency: 456ms</p>
+<hr />
+<h2 id="benefits">Benefits<a class="headerlink" href="#benefits" title="Permanent link">&para;</a></h2>
+<h3 id="debugging">🐛 Debugging<a class="headerlink" href="#debugging" title="Permanent link">&para;</a></h3>
+<p>Find issues fast:
+- See exact prompts that failed
+- Identify slow steps
+- Track error patterns</p>
+<h3 id="cost-management">💰 Cost Management<a class="headerlink" href="#cost-management" title="Permanent link">&para;</a></h3>
+<p>Control spending:
+- Track costs per execution
+- Identify expensive operations
+- Optimize high-cost paths</p>
+<h3 id="performance">⚡ Performance<a class="headerlink" href="#performance" title="Permanent link">&para;</a></h3>
+<p>Improve speed:
+- Find bottlenecks
+- Measure optimization impact
+- Monitor latency trends</p>
+<h3 id="analytics_1">📊 Analytics<a class="headerlink" href="#analytics_1" title="Permanent link">&para;</a></h3>
+<p>Make data-driven decisions:
+- Compare prompt versions
+- Track quality over time
+- Understand user patterns</p>
+<hr />
+<h2 id="best-practices">Best Practices<a class="headerlink" href="#best-practices" title="Permanent link">&para;</a></h2>
+<h3 id="do">✅ Do:<a class="headerlink" href="#do" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<p><strong>Initialize once at startup</strong>
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="n">ma</span><span class="o">.</span><span class="n">tracing</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="c1"># Then run your app</span>
+</code></pre></div></p>
+</li>
+<li>
+<p><strong>Use descriptive names</strong>
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="nd">@ma</span><span class="o">.</span><span class="n">tracing</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Extract Entities&quot;</span><span class="p">)</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">extract_entities</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>    <span class="k">pass</span>
+</code></pre></div></p>
+</li>
+<li>
+<p><strong>Tag important traces</strong>
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="n">ma</span><span class="o">.</span><span class="n">tracing</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;production&quot;</span><span class="p">,</span> <span class="s2">&quot;customer-tier-1&quot;</span><span class="p">])</span>
+</code></pre></div></p>
+</li>
+<li>
+<p><strong>Check Langfuse regularly</strong></p>
+</li>
+<li>Review traces daily</li>
+<li>Monitor costs</li>
+<li>Identify patterns</li>
+</ol>
+<h3 id="dont">❌ Don't:<a class="headerlink" href="#dont" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<p><strong>Initialize multiple times</strong>
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="c1"># ❌ Don&#39;t do this</span>
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="n">ma</span><span class="o">.</span><span class="n">tracing</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="n">ma</span><span class="o">.</span><span class="n">tracing</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>  <span class="c1"># Redundant!</span>
+</code></pre></div></p>
+</li>
+<li>
+<p><strong>Log sensitive data</strong>
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="c1"># ❌ Don&#39;t trace PII</span>
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="n">result</span> <span class="o">=</span> <span class="n">process</span><span class="p">(</span><span class="n">user_ssn</span><span class="p">)</span>  <span class="c1"># Will be in trace!</span>
+</code></pre></div></p>
+</li>
+<li>
+<p><strong>Ignore the UI</strong></p>
+</li>
+<li>Tracing is useless if you don't review traces</li>
+<li>Set up dashboards</li>
+<li>Create alerts</li>
+</ol>
+<hr />
+<h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
+<p>Now that you understand Langfuse concepts:</p>
+<ol>
+<li><strong><a href="../initialization/">Initialization</a></strong> → Set up Langfuse</li>
+<li><strong><a href="../dspy-tracing/">DSPy Tracing</a></strong> → Trace DSPy modules</li>
+<li><strong><a href="../langgraph-tracing/">LangGraph Tracing</a></strong> → Trace workflows</li>
+<li><strong><a href="../manual-tracing/">Manual Tracing</a></strong> → Add custom spans</li>
+</ol>
+<hr />
+<h2 id="external-resources">External Resources<a class="headerlink" href="#external-resources" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong><a href="https://langfuse.com/docs">Langfuse Docs</a></strong> - Official documentation</li>
+<li><strong><a href="https://cloud.langfuse.com">Langfuse Cloud</a></strong> - Hosted platform</li>
+<li><strong><a href="https://github.com/langfuse/langfuse">Langfuse GitHub</a></strong> - Self-hosting</li>
+</ul>
+<hr />
+<p><strong>Next: Set up Langfuse with <a href="../initialization/">Initialization →</a></strong></p>
+
+
+
+
+
+
+
+  
+    
+  
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Last update">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="November 1, 2025 06:26:19 UTC"><span class="timeago" datetime="2025-11-01T06:26:19+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="November 1, 2025 06:26:19 UTC">2025-11-01</span>
+  </span>
+
+    
+    
+    
+    
+  </aside>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.instant", "navigation.top", "search.suggest", "search.highlight", "content.code.annotate", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.f55a23d4.min.js"></script>
+      
+        <script src="../../../js/timeago.min.js"></script>
+      
+        <script src="../../../js/timeago_mkdocs_material.js"></script>
+      
+    
+  </body>
+</html>
