@@ -12,13 +12,9 @@
         <meta name="author" content="Sohum Kothavade">
       
       
-        <link rel="canonical" href="https://chimera-research.github.io/mahsm/getting-started/quickstart/">
+        <link rel="canonical" href="https://chimera-research.github.io/mahsm/design/ma.tuning-spec/">
       
       
-        <link rel="prev" href="../installation/">
-      
-      
-        <link rel="next" href="../../building-blocks/dspy/overview/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -26,7 +22,7 @@
     
     
       
-        <title>Quick Start - mahsm v0.1.0</title>
+        <title>Ma.tuning spec - mahsm v0.1.0</title>
       
     
     
@@ -81,11 +77,6 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
-        
-        <a href="#quickstart-building-your-first-mahsm-agent" class="md-skip">
-          Skip to content
-        </a>
-      
     </div>
     <div data-md-component="announce">
       
@@ -115,7 +106,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Quick Start
+              Ma.tuning spec
             
           </span>
         </div>
@@ -245,13 +236,11 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="../installation/" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../../getting-started/installation/" class="md-tabs__link">
           
   
   
@@ -423,31 +412,26 @@
       
   
   
-    
   
   
-  
     
     
     
     
-      
-        
-        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
         
           
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
             
   
   
@@ -460,7 +444,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             Getting Started
@@ -474,7 +458,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../installation/" class="md-nav__link">
+      <a href="../../getting-started/installation/" class="md-nav__link">
         
   
   
@@ -494,32 +478,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    Quick Start
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../getting-started/quickstart/" class="md-nav__link">
         
   
   
@@ -530,113 +492,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#complete-example" class="md-nav__link">
-    <span class="md-ellipsis">
-      Complete Example
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#breaking-it-down" class="md-nav__link">
-    <span class="md-ellipsis">
-      Breaking It Down
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Breaking It Down">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-configure-dspy" class="md-nav__link">
-    <span class="md-ellipsis">
-      1. Configure DSPy
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-initialize-tracing" class="md-nav__link">
-    <span class="md-ellipsis">
-      2. Initialize Tracing
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#3-define-state" class="md-nav__link">
-    <span class="md-ellipsis">
-      3. Define State
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#4-create-a-dspy-node" class="md-nav__link">
-    <span class="md-ellipsis">
-      4. Create a DSPy Node
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#5-build-the-workflow" class="md-nav__link">
-    <span class="md-ellipsis">
-      5. Build the Workflow
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#6-run-your-agent" class="md-nav__link">
-    <span class="md-ellipsis">
-      6. Run Your Agent
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#next-steps" class="md-nav__link">
-    <span class="md-ellipsis">
-      Next Steps
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -649,7 +504,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../core-concepts.md" class="md-nav__link">
+      <a href="../../getting-started/core-concepts.md" class="md-nav__link">
         
   
   
@@ -1829,103 +1684,6 @@
   
   
   
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#complete-example" class="md-nav__link">
-    <span class="md-ellipsis">
-      Complete Example
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#breaking-it-down" class="md-nav__link">
-    <span class="md-ellipsis">
-      Breaking It Down
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Breaking It Down">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-configure-dspy" class="md-nav__link">
-    <span class="md-ellipsis">
-      1. Configure DSPy
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-initialize-tracing" class="md-nav__link">
-    <span class="md-ellipsis">
-      2. Initialize Tracing
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#3-define-state" class="md-nav__link">
-    <span class="md-ellipsis">
-      3. Define State
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#4-create-a-dspy-node" class="md-nav__link">
-    <span class="md-ellipsis">
-      4. Create a DSPy Node
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#5-build-the-workflow" class="md-nav__link">
-    <span class="md-ellipsis">
-      5. Build the Workflow
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#6-run-your-agent" class="md-nav__link">
-    <span class="md-ellipsis">
-      6. Run Your Agent
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#next-steps" class="md-nav__link">
-    <span class="md-ellipsis">
-      Next Steps
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
   
 </nav>
                   </div>
@@ -1941,128 +1699,213 @@
 
 
 
-<h1 id="quickstart-building-your-first-mahsm-agent">Quickstart: Building Your First mahsm Agent<a class="headerlink" href="#quickstart-building-your-first-mahsm-agent" title="Permanent link">&para;</a></h1>
-<p>Let's build a simple research agent in 60 seconds to see how mahsm works. This example demonstrates the declarative nature of the framework.</p>
+  <h1>Ma.tuning spec</h1>
+
+<p># mahsm.tuning — A single-module abstraction for SFT/DPO/RL/LoRA</p>
+<p>Status: Draft (for initial PR)</p>
+<p>Owners: @SohumKothavade</p>
+<p>Last updated: 2025-11-01</p>
 <hr />
-<h2 id="complete-example">Complete Example<a class="headerlink" href="#complete-example" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">mahsm</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ma</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TypedDict</span><span class="p">,</span> <span class="n">Optional</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">dspy</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="c1"># 1. Configure DSPy</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="n">lm</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">LM</span><span class="p">(</span><span class="s1">&#39;openai/gpt-4o-mini&#39;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;OPENAI_API_KEY&quot;</span><span class="p">))</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="n">dspy</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="n">lm</span><span class="p">)</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="c1"># 2. Initialize tracing (do this once at the start of your app)</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="n">ma</span><span class="o">.</span><span class="n">tracing</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="c1"># 3. Define the shared state</span>
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="k">class</span><span class="w"> </span><span class="nc">AgentState</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>    <span class="n">question</span><span class="p">:</span> <span class="nb">str</span>
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>    <span class="n">research_result</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="c1"># 4. Create a reasoning node with @ma.dspy_node</span>
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="nd">@ma</span><span class="o">.</span><span class="n">dspy_node</span>
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="k">class</span><span class="w"> </span><span class="nc">Researcher</span><span class="p">(</span><span class="n">ma</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">predictor</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span><span class="s2">&quot;question -&gt; research_result&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>
-<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question</span><span class="p">):</span>
-<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">predictor</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">)</span>
-<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>
-<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a><span class="c1"># 5. Build and compile the graph</span>
-<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a><span class="n">workflow</span> <span class="o">=</span> <span class="n">ma</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">StateGraph</span><span class="p">(</span><span class="n">AgentState</span><span class="p">)</span>
-<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a><span class="n">workflow</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;researcher&quot;</span><span class="p">,</span> <span class="n">Researcher</span><span class="p">())</span>
-<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a><span class="n">workflow</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">ma</span><span class="o">.</span><span class="n">START</span><span class="p">,</span> <span class="s2">&quot;researcher&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a><span class="n">workflow</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;researcher&quot;</span><span class="p">,</span> <span class="n">ma</span><span class="o">.</span><span class="n">END</span><span class="p">)</span>
-<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a><span class="n">graph</span> <span class="o">=</span> <span class="n">workflow</span><span class="o">.</span><span class="n">compile</span><span class="p">()</span>
-<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>
-<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a><span class="c1"># 6. Run your agent</span>
-<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a><span class="n">result</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">invoke</span><span class="p">({</span><span class="s2">&quot;question&quot;</span><span class="p">:</span> <span class="s2">&quot;What is the future of multi-agent AI systems?&quot;</span><span class="p">})</span>
-<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;research_result&#39;</span><span class="p">])</span>
-<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a><span class="c1"># ✅ Automatically traced in Langfuse!</span>
-</code></pre></div>
-<p>That's it! You've built a fully observable and testable agent with minimal boilerplate.</p>
+<p>## Executive summary</p>
+<p>Goal: Add one concise, universal module — <code>mahsm.tuning</code> — that lets any mahsm agent participate in post‑training (SFT, DPO, RL) with adapter publication (LoRA or full weights), while keeping the runtime fast and simple. We adopt training–agent disaggregation: the agent runtime emits learning events; a remote trainer consumes events and returns artefacts via an OpenAI‑compatible endpoint. This follows the pattern demonstrated by Microsoft Agent Lightning (trainer/agent disaggregation with OpenAI‑style serving) and Arbor (DSPy‑centric RL server) [1][2][3].</p>
+<p>Design anchors:
+ - Stable abstraction is the event/trajectory schema, not any single algorithm [1][3][4].
+ - One “stage” contract for all methods: collect → curate → optimize → apply.
+ - Trainer adapters (TRL, Agent Lightning/veRL, Arbor) implement a tiny <code>fit(dataset, config) -&gt; artefact</code> API.
+ - Publishing is pluggable (LoRA adapter, new model version, policy swap).</p>
+<p>Non‑goals (initial PR): implement full PPO/GRPO in‑process, build a bespoke trace store, or replace LangFuse.</p>
 <hr />
-<h2 id="breaking-it-down">Breaking It Down<a class="headerlink" href="#breaking-it-down" title="Permanent link">&para;</a></h2>
-<h3 id="1-configure-dspy">1. Configure DSPy<a class="headerlink" href="#1-configure-dspy" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">dspy</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">lm</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">LM</span><span class="p">(</span><span class="s1">&#39;openai/gpt-4o-mini&#39;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;OPENAI_API_KEY&quot;</span><span class="p">))</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="n">dspy</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="n">lm</span><span class="p">)</span>
-</code></pre></div>
-<p><strong>What's happening:</strong>
-- Configure the language model that DSPy will use
-- <code>dspy.LM()</code> supports OpenAI, Anthropic, local models, and more
-- Use environment variables for API keys (never hardcode!)</p>
-<h3 id="2-initialize-tracing">2. Initialize Tracing<a class="headerlink" href="#2-initialize-tracing" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">ma</span><span class="o">.</span><span class="n">tracing</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
-</code></pre></div>
-<p><strong>What's happening:</strong>
-- One line enables automatic tracing for all LLM calls
-- Traces are sent to Langfuse for observability
-- Make sure you have <code>LANGFUSE_PUBLIC_KEY</code>, <code>LANGFUSE_SECRET_KEY</code>, and <code>LANGFUSE_BASE_URL</code> in your environment</p>
-<h3 id="3-define-state">3. Define State<a class="headerlink" href="#3-define-state" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TypedDict</span><span class="p">,</span> <span class="n">Optional</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="k">class</span><span class="w"> </span><span class="nc">AgentState</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    <span class="n">question</span><span class="p">:</span> <span class="nb">str</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>    <span class="n">research_result</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
-</code></pre></div>
-<p><strong>What's happening:</strong>
-- State is a TypedDict that flows through your workflow
-- <code>question</code> is required (input)
-- <code>research_result</code> is optional (populated by nodes)
-- Type-safe and IDE-friendly</p>
-<h3 id="4-create-a-dspy-node">4. Create a DSPy Node<a class="headerlink" href="#4-create-a-dspy-node" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nd">@ma</span><span class="o">.</span><span class="n">dspy_node</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="k">class</span><span class="w"> </span><span class="nc">Researcher</span><span class="p">(</span><span class="n">ma</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">predictor</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span><span class="s2">&quot;question -&gt; research_result&quot;</span><span class="p">)</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question</span><span class="p">):</span>
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">predictor</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">)</span>
-</code></pre></div>
-<p><strong>What's happening:</strong>
-- <code>@ma.dspy_node</code> makes your DSPy module work with LangGraph
-- <code>ChainOfThought</code> adds reasoning before answering
-- Signature <code>"question -&gt; research_result"</code> matches state keys
-- <code>forward()</code> method contains your logic</p>
-<h3 id="5-build-the-workflow">5. Build the Workflow<a class="headerlink" href="#5-build-the-workflow" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">workflow</span> <span class="o">=</span> <span class="n">ma</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">StateGraph</span><span class="p">(</span><span class="n">AgentState</span><span class="p">)</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">workflow</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;researcher&quot;</span><span class="p">,</span> <span class="n">Researcher</span><span class="p">())</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="n">workflow</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">ma</span><span class="o">.</span><span class="n">START</span><span class="p">,</span> <span class="s2">&quot;researcher&quot;</span><span class="p">)</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="n">workflow</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;researcher&quot;</span><span class="p">,</span> <span class="n">ma</span><span class="o">.</span><span class="n">END</span><span class="p">)</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="n">graph</span> <span class="o">=</span> <span class="n">workflow</span><span class="o">.</span><span class="n">compile</span><span class="p">()</span>
-</code></pre></div>
-<p><strong>What's happening:</strong>
-- <code>StateGraph(AgentState)</code> creates a workflow with your state schema
-- <code>add_node()</code> adds your Researcher to the graph
-- <code>add_edge()</code> defines the flow: START → researcher → END
-- <code>compile()</code> turns the workflow into an executable graph</p>
-<h3 id="6-run-your-agent">6. Run Your Agent<a class="headerlink" href="#6-run-your-agent" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">result</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">invoke</span><span class="p">({</span><span class="s2">&quot;question&quot;</span><span class="p">:</span> <span class="s2">&quot;What is the future of multi-agent AI systems?&quot;</span><span class="p">})</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;research_result&#39;</span><span class="p">])</span>
-</code></pre></div>
-<p><strong>What's happening:</strong>
-- <code>invoke()</code> runs the workflow with initial state
-- State flows through nodes, getting updated along the way
-- Returns the final state with all populated fields
-- All LLM calls are automatically traced to Langfuse!</p>
-<hr />
-<h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
+<p>## Why this now</p>
 <ul>
-<li><strong><a href="core-concepts.md">Core Concepts</a></strong> → Understand the mahsm philosophy</li>
-<li><strong><a href="../../building-blocks/dspy/overview/">DSPy Overview</a></strong> → Learn about DSPy modules</li>
-<li><strong><a href="../../building-blocks/langgraph/overview/">LangGraph Overview</a></strong> → Learn about workflows</li>
-<li><strong><a href="../guides/first-agent.md">Your First Agent</a></strong> → Build a complete multi-step agent</li>
+<li>State of the art converges on: (a) decoupled runtime vs trainer, (b) unified MDP‑like trace schema, (c) OpenAI‑style serving of the optimized policy [1][3][4].</li>
+<li>Existing trainers (TRL for SFT/DPO; veRL/LightningRL for RL; Arbor for DSPy programs) can be consumed through thin adapters rather than re‑implemented [2][4][5][6].</li>
 </ul>
 <hr />
-<p><strong>Ready to build more? Explore the <a href="../../building-blocks/dspy/overview/">Building Blocks</a>!</strong> 🚀</p>
+<p>## Architecture (three planes)</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>graph LR
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  subgraph Runtime plane (mahsm graphs)
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    A[Agent graph (LangGraph + DSPy)] -- emits --&gt; E((Learning events))
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    A -- queries --&gt; Svc(OpenAI‑ish Inference Endpoint)
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>  end
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>  subgraph Data/trace plane
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    E
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    Store[(Trace store e.g., LangFuse)]
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    E -- normalized schema --&gt; Store
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>  end
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>  subgraph Learning plane (remote trainer)
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>    T[Trainer adapters: TRL / Agent Lightning(veRL) / Arbor]
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>    T -- read --&gt; Store
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>    T -- artefacts --&gt; Pub[(Artefacts: LoRA, weights)]
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>    Pub -- served as --&gt; Svc
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>  end
+</code></pre></div>
+<p>Consequence: the agent stays responsive; training scales independently; algorithms are hot‑swappable.</p>
+<hr />
+<p>## Minimal surface area (single module)</p>
+<p>Add <code>mahsm/tuning.py</code> with four concepts and a small public API. No new top‑level packages.</p>
+<p>### 1) Event schema (stable core)</p>
+<p>A minimal MDP-ish schema sufficient for SFT/DPO/RL collection.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># sketch only — implemented as dataclasses or TypedDicts</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="k">class</span><span class="w"> </span><span class="nc">Episode</span><span class="p">:</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">;</span> <span class="n">task</span><span class="p">:</span> <span class="nb">str</span><span class="o">|</span><span class="kc">None</span><span class="p">;</span> <span class="n">metadata</span><span class="p">:</span> <span class="nb">dict</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="k">class</span><span class="w"> </span><span class="nc">Step</span><span class="p">:</span> <span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">;</span> <span class="nb">input</span><span class="p">:</span> <span class="nb">dict</span><span class="p">;</span> <span class="n">output</span><span class="p">:</span> <span class="nb">dict</span><span class="p">;</span> <span class="n">tool_calls</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">];</span> <span class="n">lat_ms</span><span class="p">:</span> <span class="nb">int</span><span class="o">|</span><span class="kc">None</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="k">class</span><span class="w"> </span><span class="nc">Reward</span><span class="p">:</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">;</span> <span class="n">source</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># e.g., &quot;user&quot;, &quot;auto-metric&quot;, &quot;rm&quot;</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="k">class</span><span class="w"> </span><span class="nc">Event</span><span class="p">:</span> <span class="n">episode_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">;</span> <span class="n">step</span><span class="p">:</span> <span class="n">Step</span><span class="o">|</span><span class="kc">None</span><span class="p">;</span> <span class="n">reward</span><span class="p">:</span> <span class="n">Reward</span><span class="o">|</span><span class="kc">None</span><span class="p">;</span> <span class="n">tags</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">];</span> <span class="n">ts</span><span class="p">:</span> <span class="nb">float</span>
+</code></pre></div>
+<p>Emission policy:
+ - Node start, node end, tool call(s), final answer, score/reward events.
+ - API: <code>ma.tuning.emit(event)</code> and convenience wrappers for common node hooks.</p>
+<p>Mapping to LangFuse:
+ - Provide a serializer: <code>Event -&gt; LangFuse trace/observation</code> and back, keeping all downstream datasets uniform [7][8].</p>
+<p>### 2) Dataset transforms</p>
+<p>Three canonical transforms from events or traces:
+ - <code>to_sft(events|trace_query, *, template=...) -&gt; Iterable[SFTExample]</code>
+ - <code>to_preferences(events|trace_query, *, pair_by=..., filters=...) -&gt; Iterable[DPOExample]</code>
+ - <code>to_trajectories(events|stream, *, window=episode|n_steps, filters=...) -&gt; Iterable[Trajectory]</code></p>
+<p>Each supports simple, composable filters: top‑k by reward, dedupe identical prompts, drop unsafe, tool‑success‑only, etc.</p>
+<p>### 3) Trainer adapters</p>
+<p>Unify all algorithms behind a single protocol.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">Artefact</span><span class="p">:</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    <span class="n">kind</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;lora&quot;</span><span class="p">,</span> <span class="s2">&quot;full_weights&quot;</span><span class="p">,</span> <span class="s2">&quot;prompt&quot;</span><span class="p">,</span> <span class="s2">&quot;policy&quot;</span><span class="p">]</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    <span class="n">uri</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># where to fetch it</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="k">class</span><span class="w"> </span><span class="nc">TrainerAdapter</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Artefact</span><span class="p">:</span> <span class="o">...</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="c1"># Built‑ins (thin wrappers)</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="n">TRL_SFT</span><span class="p">,</span> <span class="n">TRL_DPO</span><span class="p">,</span> <span class="n">VERL_RL</span><span class="p">,</span> <span class="n">Arbor_RL</span>
+</code></pre></div>
+<ul>
+<li>TRL: calls HF TRL’s SFT/DPO trainers [5][6].</li>
+<li>VERL/Lightning: consumes trajectories, supports disaggregated rollout; expects OpenAI‑ish serving in front [4].</li>
+<li>Arbor: remote DSPy optimizer server; feeds DSPy programs/episodes [2].</li>
+</ul>
+<p>### 4) Publishing (apply)</p>
+<p>Minimal application targets:
+ - <code>apply_lora(artefact)</code> — attach LoRA to the active LM in DSPy (<code>dspy.settings.configure(lm=...)</code>).
+ - <code>apply_model(artefact)</code> — switch to a new base model/endpoint.
+ - <code>apply_policy(artefact)</code> — hot‑swap a graph policy (advanced/future).</p>
+<p>The apply functions use Mahsm’s existing DSPy/graph wrappers; no trainer coupling.</p>
+<hr />
+<p>## One universal “stage” abstraction</p>
+<p>A stage composes: source → curate → optimize → apply.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nd">@dataclass</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="k">class</span><span class="w"> </span><span class="nc">Source</span><span class="p">:</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    <span class="n">uri</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># e.g., live://graph/&lt;id&gt;, trace://langfuse/&lt;project&gt;/&lt;task&gt;, dataset://hf/&lt;name&gt;, replay://buffer</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="nd">@dataclass</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="k">class</span><span class="w"> </span><span class="nc">Stage</span><span class="p">:</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>    <span class="n">source</span><span class="p">:</span> <span class="n">Source</span>                      <span class="c1"># where experience comes from</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>    <span class="n">curate</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">]</span>     <span class="c1"># to_sft / to_preferences / to_trajectories</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>    <span class="n">optimize</span><span class="p">:</span> <span class="n">TrainerAdapter</span>            <span class="c1"># SFT / DPO / RL (via adapter)</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>    <span class="n">apply</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Artefact</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span>   <span class="c1"># adapter://lora, model://version, policy://swap</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="nd">@dataclass</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="k">class</span><span class="w"> </span><span class="nc">Plan</span><span class="p">:</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>    <span class="n">stages</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Stage</span><span class="p">]</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>    <span class="n">guard</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># simple acceptance criteria, e.g., min metrics</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="n">plan</span><span class="p">:</span> <span class="n">Plan</span><span class="p">):</span>
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a>    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">plan</span><span class="o">.</span><span class="n">stages</span><span class="p">:</span>
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a>        <span class="n">ds</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">curate</span><span class="p">(</span><span class="n">resolve</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">source</span><span class="p">))</span>
+<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a>        <span class="n">artefact</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">optimize</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="p">{})</span>
+<a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a>        <span class="n">s</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">artefact</span><span class="p">)</span>
+</code></pre></div>
+<p>This keeps all methods uniform. SFT is just <code>trace -&gt; to_sft -&gt; TRL_SFT -&gt; apply_lora</code>. Online RL is <code>live -&gt; to_trajectories -&gt; VERL_RL -&gt; apply_lora</code>.</p>
+<hr />
+<p>## Public API sketch (what users write)</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">mahsm</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ma</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">mahsm</span><span class="w"> </span><span class="kn">import</span> <span class="n">tuning</span> <span class="k">as</span> <span class="n">mt</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># 1) Wrap existing graph (no changes to nodes)</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="n">graph</span> <span class="o">=</span> <span class="n">build_graph_somewhere</span><span class="p">()</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="c1"># 2) Start event collection (LangFuse is already set up in ma.tracing)</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="n">collector</span> <span class="o">=</span> <span class="n">mt</span><span class="o">.</span><span class="n">collect_from</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="s2">&quot;proj1&quot;</span><span class="p">,</span> <span class="n">task</span><span class="o">=</span><span class="s2">&quot;codegen&quot;</span><span class="p">)</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="c1"># 3) Define a staged plan</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="n">plan</span> <span class="o">=</span> <span class="n">mt</span><span class="o">.</span><span class="n">Plan</span><span class="p">(</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>    <span class="n">stages</span><span class="o">=</span><span class="p">[</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>        <span class="n">mt</span><span class="o">.</span><span class="n">Stage</span><span class="p">(</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;bootstrap-sft&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>            <span class="n">source</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">Source</span><span class="p">(</span><span class="s2">&quot;trace://langfuse/proj1/codegen&quot;</span><span class="p">),</span>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>            <span class="n">curate</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">to_sft</span><span class="p">,</span>
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>            <span class="n">optimize</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">TRL_SFT</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;Qwen/Qwen2.5-7B&quot;</span><span class="p">,</span> <span class="n">lora</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a>            <span class="n">apply</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">apply_lora</span><span class="p">,</span>
+<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a>        <span class="p">),</span>
+<a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a>        <span class="n">mt</span><span class="o">.</span><span class="n">Stage</span><span class="p">(</span>
+<a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a>            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;align-dpo&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a>            <span class="n">source</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">Source</span><span class="p">(</span><span class="s2">&quot;trace://langfuse/proj1/codegen&quot;</span><span class="p">),</span>
+<a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a>            <span class="n">curate</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">to_preferences</span><span class="p">,</span>
+<a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a>            <span class="n">optimize</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">TRL_DPO</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;Qwen/Qwen2.5-7B&quot;</span><span class="p">,</span> <span class="n">lora</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+<a id="__codelineno-4-25" name="__codelineno-4-25" href="#__codelineno-4-25"></a>            <span class="n">apply</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">apply_lora</span><span class="p">,</span>
+<a id="__codelineno-4-26" name="__codelineno-4-26" href="#__codelineno-4-26"></a>        <span class="p">),</span>
+<a id="__codelineno-4-27" name="__codelineno-4-27" href="#__codelineno-4-27"></a>        <span class="n">mt</span><span class="o">.</span><span class="n">Stage</span><span class="p">(</span>
+<a id="__codelineno-4-28" name="__codelineno-4-28" href="#__codelineno-4-28"></a>            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;online-rl&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-29" name="__codelineno-4-29" href="#__codelineno-4-29"></a>            <span class="n">source</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">Source</span><span class="p">(</span><span class="s2">&quot;live://graph/codegen&quot;</span><span class="p">),</span>
+<a id="__codelineno-4-30" name="__codelineno-4-30" href="#__codelineno-4-30"></a>            <span class="n">curate</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">to_trajectories</span><span class="p">,</span>
+<a id="__codelineno-4-31" name="__codelineno-4-31" href="#__codelineno-4-31"></a>            <span class="n">optimize</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">VERL_RL</span><span class="p">(</span><span class="n">endpoint</span><span class="o">=</span><span class="s2">&quot;http://trainer:8080&quot;</span><span class="p">),</span>
+<a id="__codelineno-4-32" name="__codelineno-4-32" href="#__codelineno-4-32"></a>            <span class="n">apply</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">apply_lora</span><span class="p">,</span>
+<a id="__codelineno-4-33" name="__codelineno-4-33" href="#__codelineno-4-33"></a>        <span class="p">),</span>
+<a id="__codelineno-4-34" name="__codelineno-4-34" href="#__codelineno-4-34"></a>    <span class="p">],</span>
+<a id="__codelineno-4-35" name="__codelineno-4-35" href="#__codelineno-4-35"></a>    <span class="n">guard</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;qa.accuracy&quot;</span><span class="p">:</span> <span class="mf">0.9</span><span class="p">},</span>
+<a id="__codelineno-4-36" name="__codelineno-4-36" href="#__codelineno-4-36"></a><span class="p">)</span>
+<a id="__codelineno-4-37" name="__codelineno-4-37" href="#__codelineno-4-37"></a>
+<a id="__codelineno-4-38" name="__codelineno-4-38" href="#__codelineno-4-38"></a><span class="n">mt</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">plan</span><span class="p">)</span>
+</code></pre></div>
+<hr />
+<p>## Integration points in mahsm today</p>
+<ul>
+<li>Graph + nodes: <code>mahsm.core.dspy_node</code> already unifies node IO; tuning can wrap these with event emit hooks.</li>
+<li>Tracing: <code>mahsm.tracing</code> (LangFuse) provides spans; tuning serializes its <code>Event</code> schema to the same backend [7].</li>
+<li>Testing/evals: <code>mahsm.testing.PytestHarness</code> can be the guard runner, logging back via LangFuse.</li>
+</ul>
+<p>Minimal code changes to existing modules: none. <code>mahsm.tuning</code> imports <code>mahsm.graph</code>, <code>mahsm.dspy</code>, and optional <code>mahsm.tracing</code>.</p>
+<hr />
+<p>## MVP scope (first PR)</p>
+<p>1) Ship <code>mahsm/tuning.py</code> with:
+    - Event datatypes + <code>emit()</code> + LangFuse serializers.
+    - <code>to_sft</code>, <code>to_preferences</code>, <code>to_trajectories</code> with basic filters.
+    - Adapters: <code>TRL_SFT</code>, <code>TRL_DPO</code> (local, single‑GPU happy path; LoRA via PEFT). Config dict passthrough.
+    - <code>apply_lora</code> (DSPy LM adaptor swap) and <code>apply_model</code> (endpoint swap).
+    - <code>Stage</code>, <code>Plan</code>, and <code>run()</code>.</p>
+<p>2) Example in <code>docs/getting-started/</code>: “Tune your existing mahsm agent in 20 lines”.</p>
+<p>3) Optional: a tiny <code>LangFuse -&gt; SFT examples</code> cookbook.</p>
+<p>Out of scope for MVP: online RL training loop, remote rollout orchestration. Those come via adapters next.</p>
+<hr />
+<p>## Phase 2 (follow‑up PRs)</p>
+<ul>
+<li>Adapter: <code>VERL_RL</code> (consumes trajectories, talks to a remote trainer; OpenAI‑compatible serving) [4].</li>
+<li>Adapter: <code>Arbor_RL</code> (connect to Arbor server; DSPy program optimization) [2].</li>
+<li>Reward model and auto‑metrics wiring (generative RM prototypes; or use existing evaluator outputs) [4].</li>
+<li>Policy hot‑swap for LangGraph (advanced publisher).</li>
+</ul>
+<hr />
+<p>## Design decisions and rationale</p>
+<ul>
+<li>Event schema first: Algorithms churn; trajectories (episode → steps → rewards → metadata) are the durable contract [1][3][4].</li>
+<li>Single “stage” abstraction: reduces all tuning to four verbs; easiest conceptual on‑ramp.</li>
+<li>Adapters over implementations: leverage TRL/veRL/Arbor and inherit their improvements [2][4][5].</li>
+<li>Disaggregation by default: keeps mahsm runtime responsive; trainers scale independently [1][3][4].</li>
+</ul>
+<hr />
+<p>## Open questions for confirmation</p>
+<p>1) Default trace store: standardize on LangFuse for now (yes/no)? If no, ship a neutral JSONL store as fallback.
+ 2) First adapters to land: TRL SFT+DPO (MVP), then VERL RL, then Arbor — agree?
+ 3) Publish targets: prioritize LoRA for size/mobility; defer full‑weights? Any preferred PEFT backend/models?
+ 4) Guard API: reuse <code>mahsm.testing</code> evaluators, or keep a lightweight metric callback in <code>tuning.run()</code>?</p>
+<hr />
+<p>## References</p>
+<p>[1] Agent Lightning: Train ANY AI Agents with Reinforcement Learning (arXiv, 2025) — https://arxiv.org/abs/2508.03680</p>
+<p>[2] Ziems/arbor: A framework for optimizing DSPy programs with RL — https://github.com/ziems/arbor</p>
+<p>[3] Agent Lightning project &amp; docs — https://github.com/microsoft/agent-lightning and https://microsoft.github.io/agent-lightning/latest/</p>
+<p>[4] veRL/VERL (Volcano Engine RL for LLMs) — https://github.com/volcengine/verl and release notes — https://github.com/volcengine/verl/releases</p>
+<p>[5] Hugging Face TRL (SFT/DPO/RL) — https://github.com/huggingface/trl</p>
+<p>[6] TRL documentation: SFT Trainer and DPO Trainer — https://huggingface.co/docs/trl/en/sft_trainer and https://huggingface.co/docs/trl/en/dpo_trainer</p>
+<p>[7] LangFuse data/API: query traces via SDKs — https://langfuse.com/docs/api-and-data-platform/features/query-via-sdk</p>
+<p>[8] LangFuse export options — https://langfuse.com/docs/api-and-data-platform/features/export-from-ui</p>
 
 
 
