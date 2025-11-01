@@ -832,7 +832,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../building-blocks/langgraph/nodes-edges.md" class="md-nav__link">
+      <a href="../../building-blocks/langgraph/nodes-edges/" class="md-nav__link">
         
   
   
@@ -855,7 +855,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../building-blocks/langgraph/conditional-routing.md" class="md-nav__link">
+      <a href="../../building-blocks/langgraph/conditional-routing/" class="md-nav__link">
         
   
   
@@ -878,7 +878,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../building-blocks/langgraph/compilation.md" class="md-nav__link">
+      <a href="../../building-blocks/langgraph/compilation/" class="md-nav__link">
         
   
   
@@ -901,7 +901,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../building-blocks/langgraph/visualization.md" class="md-nav__link">
+      <a href="../../building-blocks/langgraph/visualization/" class="md-nav__link">
         
   
   
@@ -1715,6 +1715,28 @@
  - Publishing is pluggable (LoRA adapter, new model version, policy swap).</p>
 <p>Non‑goals (initial PR): implement full PPO/GRPO in‑process, build a bespoke trace store, or replace LangFuse.</p>
 <hr />
+<p>## Reusing existing mahsm integrations (zero extra plumbing)</p>
+<ul>
+<li>Traces: we keep using LangFuse; <code>tuning.emit()</code> serializes to LangFuse so downstream is unchanged [7][8].</li>
+<li>Evals: reuse <code>mahsm.testing.PytestHarness</code> (EvalProtocol) to pull traces/datasets and run graph rollouts as guards.</li>
+</ul>
+<p>Example guard flow tying evals into a stage:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">mahsm</span><span class="w"> </span><span class="kn">import</span> <span class="n">testing</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">mahsm</span><span class="w"> </span><span class="kn">import</span> <span class="n">tuning</span> <span class="k">as</span> <span class="n">mt</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">plan</span> <span class="o">=</span> <span class="n">mt</span><span class="o">.</span><span class="n">Plan</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="k">def</span><span class="w"> </span><span class="nf">guard_ok</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">metrics_req</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="n">harness</span> <span class="o">=</span> <span class="n">testing</span><span class="o">.</span><span class="n">PytestHarness</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="n">harness</span><span class="o">.</span><span class="n">from_langfuse</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="s2">&quot;proj1&quot;</span><span class="p">,</span> <span class="n">task</span><span class="o">=</span><span class="s2">&quot;codegen&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="c1"># Run rollouts via EvalProtocol; compute metrics of interest (pseudo)</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    <span class="n">results</span> <span class="o">=</span> <span class="n">harness</span><span class="o">.</span><span class="n">rollout_processor</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">harness</span><span class="o">.</span><span class="n">data_loaders</span><span class="p">)</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    <span class="k">return</span> <span class="n">results</span><span class="o">.</span><span class="n">metrics</span> <span class="o">&gt;=</span> <span class="n">metrics_req</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="c1"># Inside mt.run(): after s.apply(artefact), call guard_ok(graph, plan.guard)</span>
+</code></pre></div>
+<p>This keeps LangGraph/DSPy/ LangFuse/EvalProtocol exactly as‑is; <code>mahsm.tuning</code> just coordinates stages.</p>
+<hr />
 <p>## Why this now</p>
 <ul>
 <li>State of the art converges on: (a) decoupled runtime vs trainer, (b) unified MDP‑like trace schema, (c) OpenAI‑style serving of the optimized policy [1][3][4].</li>
@@ -1722,36 +1744,65 @@
 </ul>
 <hr />
 <p>## Architecture (three planes)</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>graph LR
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  subgraph Runtime plane (mahsm graphs)
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    A[Agent graph (LangGraph + DSPy)] -- emits --&gt; E((Learning events))
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    A -- queries --&gt; Svc(OpenAI‑ish Inference Endpoint)
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>  end
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>  subgraph Data/trace plane
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    E
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    Store[(Trace store e.g., LangFuse)]
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    E -- normalized schema --&gt; Store
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>  end
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>  subgraph Learning plane (remote trainer)
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>    T[Trainer adapters: TRL / Agent Lightning(veRL) / Arbor]
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>    T -- read --&gt; Store
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>    T -- artefacts --&gt; Pub[(Artefacts: LoRA, weights)]
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>    Pub -- served as --&gt; Svc
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>  end
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>graph LR
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  subgraph Runtime plane (mahsm graphs)
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    A[Agent graph (LangGraph + DSPy)] -- emits --&gt; E((Learning events))
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    A -- queries --&gt; Svc(OpenAI‑ish Inference Endpoint)
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>  end
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>  subgraph Data/trace plane
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    E
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    Store[(Trace store e.g., LangFuse)]
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>    E -- normalized schema --&gt; Store
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>  end
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>  subgraph Learning plane (remote trainer)
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>    T[Trainer adapters: TRL / Agent Lightning(veRL) / Arbor]
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>    T -- read --&gt; Store
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>    T -- artefacts --&gt; Pub[(Artefacts: LoRA, weights)]
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>    Pub -- served as --&gt; Svc
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>  end
 </code></pre></div>
 <p>Consequence: the agent stays responsive; training scales independently; algorithms are hot‑swappable.</p>
+<hr />
+<p>## Disaggregated trainer–agent: what actually happens</p>
+<p>Steps (typical online RL loop):
+ 1) Runtime executes graph; <code>tuning.emit()</code> logs step/episode events to LangFuse.
+ 2) Trainer service (e.g., VERL/Lightning) reads trajectories from LangFuse (or a mirrored store) [1][4].
+ 3) Trainer optimizes (GRPO/PPO/DAPO/…); outputs an artefact (LoRA or weights) [4].
+ 4) Publisher exposes the artefact behind an OpenAI‑compatible endpoint (could be vLLM/SGLang) [1][4].
+ 5) Runtime continues calling the same endpoint; it now serves updated weights. No runtime code changes.</p>
+<p>Sequence diagram:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>sequenceDiagram
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>  participant User
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>  participant Runtime as mahsm runtime (LangGraph+DSPy)
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>  participant LangFuse as Trace Store
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>  participant Trainer as Trainer (veRL/Lightning/TRL+server)
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>  participant Inference as OpenAI‑style Inference
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>  User-&gt;&gt;Runtime: invoke graph(input)
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>  Runtime-&gt;&gt;LangFuse: emit(Event: step/start/tool/reward)
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>  Runtime-&gt;&gt;Inference: POST /chat/completions
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>  Inference--&gt;&gt;Runtime: completion(tokens)
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>  Note over Runtime,LangFuse: episode completes
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>  Trainer-&gt;&gt;LangFuse: query trajectories
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>  Trainer-&gt;&gt;Trainer: optimize (GRPO/PPO/DPO/SFT)
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>  Trainer--&gt;&gt;Inference: publish artefact (LoRA/weights)
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>  User-&gt;&gt;Runtime: next request (same code)
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>  Runtime-&gt;&gt;Inference: POST /chat/completions
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>  Inference--&gt;&gt;Runtime: improved policy
+</code></pre></div>
+<p>Offline SFT/DPO is identical except source is historic traces/datasets and trainer runs batch jobs (TRL) [5][6][7].</p>
 <hr />
 <p>## Minimal surface area (single module)</p>
 <p>Add <code>mahsm/tuning.py</code> with four concepts and a small public API. No new top‑level packages.</p>
 <p>### 1) Event schema (stable core)</p>
 <p>A minimal MDP-ish schema sufficient for SFT/DPO/RL collection.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># sketch only — implemented as dataclasses or TypedDicts</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="k">class</span><span class="w"> </span><span class="nc">Episode</span><span class="p">:</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">;</span> <span class="n">task</span><span class="p">:</span> <span class="nb">str</span><span class="o">|</span><span class="kc">None</span><span class="p">;</span> <span class="n">metadata</span><span class="p">:</span> <span class="nb">dict</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="k">class</span><span class="w"> </span><span class="nc">Step</span><span class="p">:</span> <span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">;</span> <span class="nb">input</span><span class="p">:</span> <span class="nb">dict</span><span class="p">;</span> <span class="n">output</span><span class="p">:</span> <span class="nb">dict</span><span class="p">;</span> <span class="n">tool_calls</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">];</span> <span class="n">lat_ms</span><span class="p">:</span> <span class="nb">int</span><span class="o">|</span><span class="kc">None</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="k">class</span><span class="w"> </span><span class="nc">Reward</span><span class="p">:</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">;</span> <span class="n">source</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># e.g., &quot;user&quot;, &quot;auto-metric&quot;, &quot;rm&quot;</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="k">class</span><span class="w"> </span><span class="nc">Event</span><span class="p">:</span> <span class="n">episode_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">;</span> <span class="n">step</span><span class="p">:</span> <span class="n">Step</span><span class="o">|</span><span class="kc">None</span><span class="p">;</span> <span class="n">reward</span><span class="p">:</span> <span class="n">Reward</span><span class="o">|</span><span class="kc">None</span><span class="p">;</span> <span class="n">tags</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">];</span> <span class="n">ts</span><span class="p">:</span> <span class="nb">float</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># sketch only — implemented as dataclasses or TypedDicts</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="k">class</span><span class="w"> </span><span class="nc">Episode</span><span class="p">:</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">;</span> <span class="n">task</span><span class="p">:</span> <span class="nb">str</span><span class="o">|</span><span class="kc">None</span><span class="p">;</span> <span class="n">metadata</span><span class="p">:</span> <span class="nb">dict</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="k">class</span><span class="w"> </span><span class="nc">Step</span><span class="p">:</span> <span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">;</span> <span class="nb">input</span><span class="p">:</span> <span class="nb">dict</span><span class="p">;</span> <span class="n">output</span><span class="p">:</span> <span class="nb">dict</span><span class="p">;</span> <span class="n">tool_calls</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">];</span> <span class="n">lat_ms</span><span class="p">:</span> <span class="nb">int</span><span class="o">|</span><span class="kc">None</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="k">class</span><span class="w"> </span><span class="nc">Reward</span><span class="p">:</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">;</span> <span class="n">source</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># e.g., &quot;user&quot;, &quot;auto-metric&quot;, &quot;rm&quot;</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="k">class</span><span class="w"> </span><span class="nc">Event</span><span class="p">:</span> <span class="n">episode_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">;</span> <span class="n">step</span><span class="p">:</span> <span class="n">Step</span><span class="o">|</span><span class="kc">None</span><span class="p">;</span> <span class="n">reward</span><span class="p">:</span> <span class="n">Reward</span><span class="o">|</span><span class="kc">None</span><span class="p">;</span> <span class="n">tags</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">];</span> <span class="n">ts</span><span class="p">:</span> <span class="nb">float</span>
 </code></pre></div>
 <p>Emission policy:
  - Node start, node end, tool call(s), final answer, score/reward events.
@@ -1766,15 +1817,15 @@
 <p>Each supports simple, composable filters: top‑k by reward, dedupe identical prompts, drop unsafe, tool‑success‑only, etc.</p>
 <p>### 3) Trainer adapters</p>
 <p>Unify all algorithms behind a single protocol.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">Artefact</span><span class="p">:</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    <span class="n">kind</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;lora&quot;</span><span class="p">,</span> <span class="s2">&quot;full_weights&quot;</span><span class="p">,</span> <span class="s2">&quot;prompt&quot;</span><span class="p">,</span> <span class="s2">&quot;policy&quot;</span><span class="p">]</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    <span class="n">uri</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># where to fetch it</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="k">class</span><span class="w"> </span><span class="nc">TrainerAdapter</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Artefact</span><span class="p">:</span> <span class="o">...</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="c1"># Built‑ins (thin wrappers)</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="n">TRL_SFT</span><span class="p">,</span> <span class="n">TRL_DPO</span><span class="p">,</span> <span class="n">VERL_RL</span><span class="p">,</span> <span class="n">Arbor_RL</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">Artefact</span><span class="p">:</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>    <span class="n">kind</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;lora&quot;</span><span class="p">,</span> <span class="s2">&quot;full_weights&quot;</span><span class="p">,</span> <span class="s2">&quot;prompt&quot;</span><span class="p">,</span> <span class="s2">&quot;policy&quot;</span><span class="p">]</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>    <span class="n">uri</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># where to fetch it</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="k">class</span><span class="w"> </span><span class="nc">TrainerAdapter</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Artefact</span><span class="p">:</span> <span class="o">...</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="c1"># Built‑ins (thin wrappers)</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="n">TRL_SFT</span><span class="p">,</span> <span class="n">TRL_DPO</span><span class="p">,</span> <span class="n">VERL_RL</span><span class="p">,</span> <span class="n">Arbor_RL</span>
 </code></pre></div>
 <ul>
 <li>TRL: calls HF TRL’s SFT/DPO trainers [5][6].</li>
@@ -1790,70 +1841,232 @@
 <hr />
 <p>## One universal “stage” abstraction</p>
 <p>A stage composes: source → curate → optimize → apply.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nd">@dataclass</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="k">class</span><span class="w"> </span><span class="nc">Source</span><span class="p">:</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    <span class="n">uri</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># e.g., live://graph/&lt;id&gt;, trace://langfuse/&lt;project&gt;/&lt;task&gt;, dataset://hf/&lt;name&gt;, replay://buffer</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="nd">@dataclass</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="k">class</span><span class="w"> </span><span class="nc">Stage</span><span class="p">:</span>
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>    <span class="n">source</span><span class="p">:</span> <span class="n">Source</span>                      <span class="c1"># where experience comes from</span>
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>    <span class="n">curate</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">]</span>     <span class="c1"># to_sft / to_preferences / to_trajectories</span>
-<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>    <span class="n">optimize</span><span class="p">:</span> <span class="n">TrainerAdapter</span>            <span class="c1"># SFT / DPO / RL (via adapter)</span>
-<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>    <span class="n">apply</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Artefact</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span>   <span class="c1"># adapter://lora, model://version, policy://swap</span>
-<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>
-<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="nd">@dataclass</span>
-<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="k">class</span><span class="w"> </span><span class="nc">Plan</span><span class="p">:</span>
-<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>    <span class="n">stages</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Stage</span><span class="p">]</span>
-<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>    <span class="n">guard</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># simple acceptance criteria, e.g., min metrics</span>
-<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>
-<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="n">plan</span><span class="p">:</span> <span class="n">Plan</span><span class="p">):</span>
-<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a>    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">plan</span><span class="o">.</span><span class="n">stages</span><span class="p">:</span>
-<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a>        <span class="n">ds</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">curate</span><span class="p">(</span><span class="n">resolve</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">source</span><span class="p">))</span>
-<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a>        <span class="n">artefact</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">optimize</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="p">{})</span>
-<a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a>        <span class="n">s</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">artefact</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nd">@dataclass</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="k">class</span><span class="w"> </span><span class="nc">Source</span><span class="p">:</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    <span class="n">uri</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># e.g., live://graph/&lt;id&gt;, trace://langfuse/&lt;project&gt;/&lt;task&gt;, dataset://hf/&lt;name&gt;, replay://buffer</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="nd">@dataclass</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="k">class</span><span class="w"> </span><span class="nc">Stage</span><span class="p">:</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>    <span class="n">source</span><span class="p">:</span> <span class="n">Source</span>                      <span class="c1"># where experience comes from</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>    <span class="n">curate</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">]</span>     <span class="c1"># to_sft / to_preferences / to_trajectories</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>    <span class="n">optimize</span><span class="p">:</span> <span class="n">TrainerAdapter</span>            <span class="c1"># SFT / DPO / RL (via adapter)</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>    <span class="n">apply</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Artefact</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span>   <span class="c1"># adapter://lora, model://version, policy://swap</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="nd">@dataclass</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="k">class</span><span class="w"> </span><span class="nc">Plan</span><span class="p">:</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>    <span class="n">stages</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Stage</span><span class="p">]</span>
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a>    <span class="n">guard</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># simple acceptance criteria, e.g., min metrics</span>
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a>
+<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="n">plan</span><span class="p">:</span> <span class="n">Plan</span><span class="p">):</span>
+<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a>    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">plan</span><span class="o">.</span><span class="n">stages</span><span class="p">:</span>
+<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a>        <span class="n">ds</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">curate</span><span class="p">(</span><span class="n">resolve</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">source</span><span class="p">))</span>
+<a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a>        <span class="n">artefact</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">optimize</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="p">{})</span>
+<a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a>        <span class="n">s</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">artefact</span><span class="p">)</span>
 </code></pre></div>
 <p>This keeps all methods uniform. SFT is just <code>trace -&gt; to_sft -&gt; TRL_SFT -&gt; apply_lora</code>. Online RL is <code>live -&gt; to_trajectories -&gt; VERL_RL -&gt; apply_lora</code>.</p>
 <hr />
+<p>## Algorithm catalog (what each needs and how it plugs in)</p>
+<table>
+<thead>
+<tr>
+<th>Algorithm</th>
+<th>Family</th>
+<th>Needs</th>
+<th>Online/Offline</th>
+<th>Typical adapter</th>
+<th>Publish</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SFT</td>
+<td>Supervised</td>
+<td>(prompt, output) pairs</td>
+<td>Offline</td>
+<td>TRL SFT [6]</td>
+<td>LoRA/full</td>
+<td>Easiest bootstrap from traces.</td>
+</tr>
+<tr>
+<td>DPO</td>
+<td>Preferences</td>
+<td>(prompt, chosen, rejected)</td>
+<td>Offline</td>
+<td>TRL DPO [5][6]</td>
+<td>LoRA/full</td>
+<td>Direct preference optimization; no RM.</td>
+</tr>
+<tr>
+<td>ORPO</td>
+<td>Preferences</td>
+<td>(prompt, chosen, rejected)</td>
+<td>Offline</td>
+<td>TRL ORPO [9]</td>
+<td>LoRA/full</td>
+<td>Odds‑ratio variant; stable.</td>
+</tr>
+<tr>
+<td>IPO</td>
+<td>Preferences</td>
+<td>(prompt, chosen, rejected)</td>
+<td>Offline</td>
+<td>TRL IPO [9]</td>
+<td>LoRA/full</td>
+<td>Inverse preference opt.</td>
+</tr>
+<tr>
+<td>KTO</td>
+<td>Preferences</td>
+<td>(prompt, output, utility)</td>
+<td>Offline</td>
+<td>TRL KTO [10]</td>
+<td>LoRA/full</td>
+<td>Prospect‑theory‑inspired.</td>
+</tr>
+<tr>
+<td>SimPO</td>
+<td>Preferences</td>
+<td>(prompt, chosen, rejected)</td>
+<td>Offline</td>
+<td>TRL SimPO [9]</td>
+<td>LoRA/full</td>
+<td>Simple preference opt.</td>
+</tr>
+<tr>
+<td>PPO</td>
+<td>RL</td>
+<td>trajectories + reward fn/RM</td>
+<td>Online/Offline</td>
+<td>TRL PPO [11], VERL PPO [4]</td>
+<td>LoRA/full</td>
+<td>Classic on‑policy RL.</td>
+</tr>
+<tr>
+<td>GRPO</td>
+<td>RL</td>
+<td>trajectories + relative rewards</td>
+<td>Online</td>
+<td>VERL/Lightning [4], ART [12]</td>
+<td>LoRA/full</td>
+<td>Efficient group‑relative PPO.</td>
+</tr>
+<tr>
+<td>RLOO</td>
+<td>RL</td>
+<td>trajectories + rewards</td>
+<td>Online</td>
+<td>TRL RLOO [9]</td>
+<td>LoRA/full</td>
+<td>Leave‑one‑out RL.</td>
+</tr>
+<tr>
+<td>XPO</td>
+<td>RL</td>
+<td>trajectories + rewards</td>
+<td>Online</td>
+<td>TRL XPO [9]</td>
+<td>LoRA/full</td>
+<td>Cross‑policy opt.</td>
+</tr>
+<tr>
+<td>Online DPO</td>
+<td>Preferences</td>
+<td>streaming prefs</td>
+<td>Online</td>
+<td>TRL Online DPO [9]</td>
+<td>LoRA/full</td>
+<td>Preference online.</td>
+</tr>
+<tr>
+<td>NashMD</td>
+<td>RL</td>
+<td>multi‑agent trajectories</td>
+<td>Online</td>
+<td>TRL NashMD [9]</td>
+<td>LoRA/full</td>
+<td>Nash mean‑field dynamics.</td>
+</tr>
+<tr>
+<td>DAPO</td>
+<td>RL</td>
+<td>trajectories + action advantage</td>
+<td>Online</td>
+<td>VERL DAPO [4]</td>
+<td>LoRA/full</td>
+<td>Advantage‑based.</td>
+</tr>
+<tr>
+<td>PRM / RewardModel</td>
+<td>RM</td>
+<td>(prompt, chosen, rejected)</td>
+<td>Offline</td>
+<td>TRL Reward/PRM [9]</td>
+<td>n/a</td>
+<td>Trains RM for RLHF.</td>
+</tr>
+<tr>
+<td>BCO</td>
+<td>Offline RL</td>
+<td>logged behavior</td>
+<td>Offline</td>
+<td>TRL BCO [9]</td>
+<td>LoRA/full</td>
+<td>Behavioral cloning variants.</td>
+</tr>
+<tr>
+<td>CPO</td>
+<td>Constrained RL</td>
+<td>trajectories + constraints</td>
+<td>Offline</td>
+<td>TRL CPO [9]</td>
+<td>LoRA/full</td>
+<td>Constraint satisfaction.</td>
+</tr>
+</tbody>
+</table>
+<p>All of these reduce to choosing: source (traces/live) → curate (to_sft/to_preferences/to_trajectories) → optimize (adapter) → apply (LoRA/model).</p>
+<hr />
 <p>## Public API sketch (what users write)</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">mahsm</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ma</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">mahsm</span><span class="w"> </span><span class="kn">import</span> <span class="n">tuning</span> <span class="k">as</span> <span class="n">mt</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># 1) Wrap existing graph (no changes to nodes)</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="n">graph</span> <span class="o">=</span> <span class="n">build_graph_somewhere</span><span class="p">()</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="c1"># 2) Start event collection (LangFuse is already set up in ma.tracing)</span>
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="n">collector</span> <span class="o">=</span> <span class="n">mt</span><span class="o">.</span><span class="n">collect_from</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="s2">&quot;proj1&quot;</span><span class="p">,</span> <span class="n">task</span><span class="o">=</span><span class="s2">&quot;codegen&quot;</span><span class="p">)</span>
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="c1"># 3) Define a staged plan</span>
-<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="n">plan</span> <span class="o">=</span> <span class="n">mt</span><span class="o">.</span><span class="n">Plan</span><span class="p">(</span>
-<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>    <span class="n">stages</span><span class="o">=</span><span class="p">[</span>
-<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>        <span class="n">mt</span><span class="o">.</span><span class="n">Stage</span><span class="p">(</span>
-<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;bootstrap-sft&quot;</span><span class="p">,</span>
-<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>            <span class="n">source</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">Source</span><span class="p">(</span><span class="s2">&quot;trace://langfuse/proj1/codegen&quot;</span><span class="p">),</span>
-<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>            <span class="n">curate</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">to_sft</span><span class="p">,</span>
-<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>            <span class="n">optimize</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">TRL_SFT</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;Qwen/Qwen2.5-7B&quot;</span><span class="p">,</span> <span class="n">lora</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
-<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a>            <span class="n">apply</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">apply_lora</span><span class="p">,</span>
-<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a>        <span class="p">),</span>
-<a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a>        <span class="n">mt</span><span class="o">.</span><span class="n">Stage</span><span class="p">(</span>
-<a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a>            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;align-dpo&quot;</span><span class="p">,</span>
-<a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a>            <span class="n">source</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">Source</span><span class="p">(</span><span class="s2">&quot;trace://langfuse/proj1/codegen&quot;</span><span class="p">),</span>
-<a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a>            <span class="n">curate</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">to_preferences</span><span class="p">,</span>
-<a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a>            <span class="n">optimize</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">TRL_DPO</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;Qwen/Qwen2.5-7B&quot;</span><span class="p">,</span> <span class="n">lora</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
-<a id="__codelineno-4-25" name="__codelineno-4-25" href="#__codelineno-4-25"></a>            <span class="n">apply</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">apply_lora</span><span class="p">,</span>
-<a id="__codelineno-4-26" name="__codelineno-4-26" href="#__codelineno-4-26"></a>        <span class="p">),</span>
-<a id="__codelineno-4-27" name="__codelineno-4-27" href="#__codelineno-4-27"></a>        <span class="n">mt</span><span class="o">.</span><span class="n">Stage</span><span class="p">(</span>
-<a id="__codelineno-4-28" name="__codelineno-4-28" href="#__codelineno-4-28"></a>            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;online-rl&quot;</span><span class="p">,</span>
-<a id="__codelineno-4-29" name="__codelineno-4-29" href="#__codelineno-4-29"></a>            <span class="n">source</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">Source</span><span class="p">(</span><span class="s2">&quot;live://graph/codegen&quot;</span><span class="p">),</span>
-<a id="__codelineno-4-30" name="__codelineno-4-30" href="#__codelineno-4-30"></a>            <span class="n">curate</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">to_trajectories</span><span class="p">,</span>
-<a id="__codelineno-4-31" name="__codelineno-4-31" href="#__codelineno-4-31"></a>            <span class="n">optimize</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">VERL_RL</span><span class="p">(</span><span class="n">endpoint</span><span class="o">=</span><span class="s2">&quot;http://trainer:8080&quot;</span><span class="p">),</span>
-<a id="__codelineno-4-32" name="__codelineno-4-32" href="#__codelineno-4-32"></a>            <span class="n">apply</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">apply_lora</span><span class="p">,</span>
-<a id="__codelineno-4-33" name="__codelineno-4-33" href="#__codelineno-4-33"></a>        <span class="p">),</span>
-<a id="__codelineno-4-34" name="__codelineno-4-34" href="#__codelineno-4-34"></a>    <span class="p">],</span>
-<a id="__codelineno-4-35" name="__codelineno-4-35" href="#__codelineno-4-35"></a>    <span class="n">guard</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;qa.accuracy&quot;</span><span class="p">:</span> <span class="mf">0.9</span><span class="p">},</span>
-<a id="__codelineno-4-36" name="__codelineno-4-36" href="#__codelineno-4-36"></a><span class="p">)</span>
-<a id="__codelineno-4-37" name="__codelineno-4-37" href="#__codelineno-4-37"></a>
-<a id="__codelineno-4-38" name="__codelineno-4-38" href="#__codelineno-4-38"></a><span class="n">mt</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">plan</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">mahsm</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ma</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">mahsm</span><span class="w"> </span><span class="kn">import</span> <span class="n">tuning</span> <span class="k">as</span> <span class="n">mt</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c1"># 1) Wrap existing graph (no changes to nodes)</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="n">graph</span> <span class="o">=</span> <span class="n">build_graph_somewhere</span><span class="p">()</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="c1"># 2) Start event collection (LangFuse is already set up in ma.tracing)</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="n">collector</span> <span class="o">=</span> <span class="n">mt</span><span class="o">.</span><span class="n">collect_from</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="s2">&quot;proj1&quot;</span><span class="p">,</span> <span class="n">task</span><span class="o">=</span><span class="s2">&quot;codegen&quot;</span><span class="p">)</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="c1"># 3) Define a staged plan</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="n">plan</span> <span class="o">=</span> <span class="n">mt</span><span class="o">.</span><span class="n">Plan</span><span class="p">(</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>    <span class="n">stages</span><span class="o">=</span><span class="p">[</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>        <span class="n">mt</span><span class="o">.</span><span class="n">Stage</span><span class="p">(</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;bootstrap-sft&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a>            <span class="n">source</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">Source</span><span class="p">(</span><span class="s2">&quot;trace://langfuse/proj1/codegen&quot;</span><span class="p">),</span>
+<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a>            <span class="n">curate</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">to_sft</span><span class="p">,</span>
+<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a>            <span class="n">optimize</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">TRL_SFT</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;Qwen/Qwen2.5-7B&quot;</span><span class="p">,</span> <span class="n">lora</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+<a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a>            <span class="n">apply</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">apply_lora</span><span class="p">,</span>
+<a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a>        <span class="p">),</span>
+<a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a>        <span class="n">mt</span><span class="o">.</span><span class="n">Stage</span><span class="p">(</span>
+<a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a>            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;align-dpo&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a>            <span class="n">source</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">Source</span><span class="p">(</span><span class="s2">&quot;trace://langfuse/proj1/codegen&quot;</span><span class="p">),</span>
+<a id="__codelineno-6-23" name="__codelineno-6-23" href="#__codelineno-6-23"></a>            <span class="n">curate</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">to_preferences</span><span class="p">,</span>
+<a id="__codelineno-6-24" name="__codelineno-6-24" href="#__codelineno-6-24"></a>            <span class="n">optimize</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">TRL_DPO</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;Qwen/Qwen2.5-7B&quot;</span><span class="p">,</span> <span class="n">lora</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+<a id="__codelineno-6-25" name="__codelineno-6-25" href="#__codelineno-6-25"></a>            <span class="n">apply</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">apply_lora</span><span class="p">,</span>
+<a id="__codelineno-6-26" name="__codelineno-6-26" href="#__codelineno-6-26"></a>        <span class="p">),</span>
+<a id="__codelineno-6-27" name="__codelineno-6-27" href="#__codelineno-6-27"></a>        <span class="n">mt</span><span class="o">.</span><span class="n">Stage</span><span class="p">(</span>
+<a id="__codelineno-6-28" name="__codelineno-6-28" href="#__codelineno-6-28"></a>            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;online-rl&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-29" name="__codelineno-6-29" href="#__codelineno-6-29"></a>            <span class="n">source</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">Source</span><span class="p">(</span><span class="s2">&quot;live://graph/codegen&quot;</span><span class="p">),</span>
+<a id="__codelineno-6-30" name="__codelineno-6-30" href="#__codelineno-6-30"></a>            <span class="n">curate</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">to_trajectories</span><span class="p">,</span>
+<a id="__codelineno-6-31" name="__codelineno-6-31" href="#__codelineno-6-31"></a>            <span class="n">optimize</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">VERL_RL</span><span class="p">(</span><span class="n">endpoint</span><span class="o">=</span><span class="s2">&quot;http://trainer:8080&quot;</span><span class="p">),</span>
+<a id="__codelineno-6-32" name="__codelineno-6-32" href="#__codelineno-6-32"></a>            <span class="n">apply</span><span class="o">=</span><span class="n">mt</span><span class="o">.</span><span class="n">apply_lora</span><span class="p">,</span>
+<a id="__codelineno-6-33" name="__codelineno-6-33" href="#__codelineno-6-33"></a>        <span class="p">),</span>
+<a id="__codelineno-6-34" name="__codelineno-6-34" href="#__codelineno-6-34"></a>    <span class="p">],</span>
+<a id="__codelineno-6-35" name="__codelineno-6-35" href="#__codelineno-6-35"></a>    <span class="n">guard</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;qa.accuracy&quot;</span><span class="p">:</span> <span class="mf">0.9</span><span class="p">},</span>
+<a id="__codelineno-6-36" name="__codelineno-6-36" href="#__codelineno-6-36"></a><span class="p">)</span>
+<a id="__codelineno-6-37" name="__codelineno-6-37" href="#__codelineno-6-37"></a>
+<a id="__codelineno-6-38" name="__codelineno-6-38" href="#__codelineno-6-38"></a><span class="n">mt</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">plan</span><span class="p">)</span>
 </code></pre></div>
 <hr />
 <p>## Integration points in mahsm today</p>
@@ -1874,6 +2087,9 @@
 <p>2) Example in <code>docs/getting-started/</code>: “Tune your existing mahsm agent in 20 lines”.</p>
 <p>3) Optional: a tiny <code>LangFuse -&gt; SFT examples</code> cookbook.</p>
 <p>Out of scope for MVP: online RL training loop, remote rollout orchestration. Those come via adapters next.</p>
+<hr />
+<p>## Adapters vs. in‑house implementations</p>
+<p>Positioning: start with adapters (fast, low maintenance, inherit upstream advances). As we standardize our event/dataset contracts and find gaps, we can internalize stable algorithms (copy/port) behind the same <code>TrainerAdapter</code> interface without breaking users.</p>
 <hr />
 <p>## Phase 2 (follow‑up PRs)</p>
 <ul>
@@ -1906,6 +2122,10 @@
 <p>[6] TRL documentation: SFT Trainer and DPO Trainer — https://huggingface.co/docs/trl/en/sft_trainer and https://huggingface.co/docs/trl/en/dpo_trainer</p>
 <p>[7] LangFuse data/API: query traces via SDKs — https://langfuse.com/docs/api-and-data-platform/features/query-via-sdk</p>
 <p>[8] LangFuse export options — https://langfuse.com/docs/api-and-data-platform/features/export-from-ui</p>
+<p>[9] TRL index (algorithms overview) — https://huggingface.co/docs/trl/en/index</p>
+<p>[10] TRL KTO Trainer — https://huggingface.co/docs/trl/main/en/kto_trainer</p>
+<p>[11] TRL PPO Trainer — https://huggingface.co/docs/trl/main/en/ppo_trainer</p>
+<p>[12] OpenPipe ART (Agent Reinforcement Trainer, GRPO for agents) — https://github.com/OpenPipe/ART</p>
 
 
 
@@ -1926,7 +2146,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="November 1, 2025 04:15:20 UTC"><span class="timeago" datetime="2025-11-01T04:15:20+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="November 1, 2025 04:15:20 UTC">2025-11-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="November 1, 2025 04:54:57 UTC"><span class="timeago" datetime="2025-11-01T04:54:57+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="November 1, 2025 04:54:57 UTC">2025-11-01</span>
   </span>
 
     
