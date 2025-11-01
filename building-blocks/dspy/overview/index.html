@@ -950,7 +950,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../modules.md" class="md-nav__link">
+      <a href="../modules/" class="md-nav__link">
         
   
   
@@ -973,7 +973,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../optimizers.md" class="md-nav__link">
+      <a href="../optimizers/" class="md-nav__link">
         
   
   
@@ -1096,7 +1096,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../langgraph/state.md" class="md-nav__link">
+      <a href="../../langgraph/state/" class="md-nav__link">
         
   
   
@@ -2331,7 +2331,7 @@
 <a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">):</span>
 <a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">predictor</span><span class="p">(</span><span class="nb">input</span><span class="o">=</span><span class="nb">input</span><span class="p">)</span>
 </code></pre></div>
-<p><strong><a href="modules.md">Learn more about Modules →</a></strong></p>
+<p><strong><a href="../modules/">Learn more about Modules →</a></strong></p>
 <h3 id="3-optimizers-teleprompts">3. <strong>Optimizers (Teleprompts)</strong><a class="headerlink" href="#3-optimizers-teleprompts" title="Permanent link">&para;</a></h3>
 <p>Optimizers automatically improve your modules:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">dspy.teleprompt</span><span class="w"> </span><span class="kn">import</span> <span class="n">BootstrapFewShot</span><span class="p">,</span> <span class="n">MIPRO</span>
@@ -2344,7 +2344,7 @@
 <a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="n">optimizer</span> <span class="o">=</span> <span class="n">MIPRO</span><span class="p">(</span><span class="n">metric</span><span class="o">=</span><span class="n">my_metric</span><span class="p">)</span>
 <a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="n">optimized</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">my_module</span><span class="p">,</span> <span class="n">trainset</span><span class="o">=</span><span class="n">train</span><span class="p">,</span> <span class="n">valset</span><span class="o">=</span><span class="n">val</span><span class="p">)</span>
 </code></pre></div>
-<p><strong><a href="optimizers.md">Learn more about Optimizers →</a></strong></p>
+<p><strong><a href="../optimizers/">Learn more about Optimizers →</a></strong></p>
 <hr />
 <h2 id="dspy-in-mahsm">DSPy in mahsm<a class="headerlink" href="#dspy-in-mahsm" title="Permanent link">&para;</a></h2>
 <p>mahsm makes DSPy even easier by integrating it with LangGraph workflows:</p>
@@ -2471,8 +2471,8 @@
 <h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong><a href="../signatures/">DSPy Signatures</a></strong> → Learn how to define inputs and outputs</li>
-<li><strong><a href="modules.md">DSPy Modules</a></strong> → Explore built-in modules like ChainOfThought, ReAct</li>
-<li><strong><a href="optimizers.md">DSPy Optimizers</a></strong> → Automatically improve your prompts</li>
+<li><strong><a href="../modules/">DSPy Modules</a></strong> → Explore built-in modules like ChainOfThought, ReAct</li>
+<li><strong><a href="../optimizers/">DSPy Optimizers</a></strong> → Automatically improve your prompts</li>
 <li><strong><a href="best-practices.md">Best Practices</a></strong> → Tips for production DSPy code</li>
 </ul>
 <hr />
