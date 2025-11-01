@@ -22,6 +22,33 @@
 
  ---
 
+ ## Reusing existing mahsm integrations (zero extra plumbing)
+
+ - Traces: we keep using LangFuse; `tuning.emit()` serializes to LangFuse so downstream is unchanged [7][8].
+ - Evals: reuse `mahsm.testing.PytestHarness` (EvalProtocol) to pull traces/datasets and run graph rollouts as guards.
+
+ Example guard flow tying evals into a stage:
+
+ ```python
+ from mahsm import testing
+ from mahsm import tuning as mt
+
+ plan = mt.Plan(...)
+
+ def guard_ok(graph, metrics_req: dict) -> bool:
+     harness = testing.PytestHarness(graph)
+     harness.from_langfuse(project="proj1", task="codegen")
+     # Run rollouts via EvalProtocol; compute metrics of interest (pseudo)
+     results = harness.rollout_processor.run(harness.data_loaders)
+     return results.metrics >= metrics_req
+
+ # Inside mt.run(): after s.apply(artefact), call guard_ok(graph, plan.guard)
+ ```
+
+ This keeps LangGraph/DSPy/ LangFuse/EvalProtocol exactly as‑is; `mahsm.tuning` just coordinates stages.
+
+ ---
+
  ## Why this now
 
  - State of the art converges on: (a) decoupled runtime vs trainer, (b) unified MDP‑like trace schema, (c) OpenAI‑style serving of the optimized policy [1][3][4].
@@ -53,6 +80,42 @@
  ```
 
  Consequence: the agent stays responsive; training scales independently; algorithms are hot‑swappable.
+
+ ---
+
+ ## Disaggregated trainer–agent: what actually happens
+
+ Steps (typical online RL loop):
+ 1) Runtime executes graph; `tuning.emit()` logs step/episode events to LangFuse.
+ 2) Trainer service (e.g., VERL/Lightning) reads trajectories from LangFuse (or a mirrored store) [1][4].
+ 3) Trainer optimizes (GRPO/PPO/DAPO/…); outputs an artefact (LoRA or weights) [4].
+ 4) Publisher exposes the artefact behind an OpenAI‑compatible endpoint (could be vLLM/SGLang) [1][4].
+ 5) Runtime continues calling the same endpoint; it now serves updated weights. No runtime code changes.
+
+ Sequence diagram:
+
+ ```mermaid
+ sequenceDiagram
+   participant User
+   participant Runtime as mahsm runtime (LangGraph+DSPy)
+   participant LangFuse as Trace Store
+   participant Trainer as Trainer (veRL/Lightning/TRL+server)
+   participant Inference as OpenAI‑style Inference
+
+   User->>Runtime: invoke graph(input)
+   Runtime->>LangFuse: emit(Event: step/start/tool/reward)
+   Runtime->>Inference: POST /chat/completions
+   Inference-->>Runtime: completion(tokens)
+   Note over Runtime,LangFuse: episode completes
+   Trainer->>LangFuse: query trajectories
+   Trainer->>Trainer: optimize (GRPO/PPO/DPO/SFT)
+   Trainer-->>Inference: publish artefact (LoRA/weights)
+   User->>Runtime: next request (same code)
+   Runtime->>Inference: POST /chat/completions
+   Inference-->>Runtime: improved policy
+ ```
+
+ Offline SFT/DPO is identical except source is historic traces/datasets and trainer runs batch jobs (TRL) [5][6][7].
 
  ---
 
@@ -152,6 +215,31 @@
 
  ---
 
+ ## Algorithm catalog (what each needs and how it plugs in)
+
+ | Algorithm | Family | Needs | Online/Offline | Typical adapter | Publish | Notes |
+ |---|---|---|---|---|---|---|
+ | SFT | Supervised | (prompt, output) pairs | Offline | TRL SFT [6] | LoRA/full | Easiest bootstrap from traces.
+ | DPO | Preferences | (prompt, chosen, rejected) | Offline | TRL DPO [5][6] | LoRA/full | Direct preference optimization; no RM.
+ | ORPO | Preferences | (prompt, chosen, rejected) | Offline | TRL ORPO [9] | LoRA/full | Odds‑ratio variant; stable.
+ | IPO | Preferences | (prompt, chosen, rejected) | Offline | TRL IPO [9] | LoRA/full | Inverse preference opt.
+ | KTO | Preferences | (prompt, output, utility) | Offline | TRL KTO [10] | LoRA/full | Prospect‑theory‑inspired.
+ | SimPO | Preferences | (prompt, chosen, rejected) | Offline | TRL SimPO [9] | LoRA/full | Simple preference opt.
+ | PPO | RL | trajectories + reward fn/RM | Online/Offline | TRL PPO [11], VERL PPO [4] | LoRA/full | Classic on‑policy RL.
+ | GRPO | RL | trajectories + relative rewards | Online | VERL/Lightning [4], ART [12] | LoRA/full | Efficient group‑relative PPO.
+ | RLOO | RL | trajectories + rewards | Online | TRL RLOO [9] | LoRA/full | Leave‑one‑out RL.
+ | XPO | RL | trajectories + rewards | Online | TRL XPO [9] | LoRA/full | Cross‑policy opt.
+ | Online DPO | Preferences | streaming prefs | Online | TRL Online DPO [9] | LoRA/full | Preference online.
+ | NashMD | RL | multi‑agent trajectories | Online | TRL NashMD [9] | LoRA/full | Nash mean‑field dynamics.
+ | DAPO | RL | trajectories + action advantage | Online | VERL DAPO [4] | LoRA/full | Advantage‑based.
+ | PRM / RewardModel | RM | (prompt, chosen, rejected) | Offline | TRL Reward/PRM [9] | n/a | Trains RM for RLHF.
+ | BCO | Offline RL | logged behavior | Offline | TRL BCO [9] | LoRA/full | Behavioral cloning variants.
+ | CPO | Constrained RL | trajectories + constraints | Offline | TRL CPO [9] | LoRA/full | Constraint satisfaction.
+
+ All of these reduce to choosing: source (traces/live) → curate (to_sft/to_preferences/to_trajectories) → optimize (adapter) → apply (LoRA/model).
+
+ ---
+
  ## Public API sketch (what users write)
 
  ```python
@@ -224,6 +312,12 @@
 
  ---
 
+ ## Adapters vs. in‑house implementations
+
+ Positioning: start with adapters (fast, low maintenance, inherit upstream advances). As we standardize our event/dataset contracts and find gaps, we can internalize stable algorithms (copy/port) behind the same `TrainerAdapter` interface without breaking users.
+
+ ---
+
  ## Phase 2 (follow‑up PRs)
 
  - Adapter: `VERL_RL` (consumes trajectories, talks to a remote trainer; OpenAI‑compatible serving) [4].
@@ -268,3 +362,11 @@
  [7] LangFuse data/API: query traces via SDKs — https://langfuse.com/docs/api-and-data-platform/features/query-via-sdk
 
  [8] LangFuse export options — https://langfuse.com/docs/api-and-data-platform/features/export-from-ui
+
+ [9] TRL index (algorithms overview) — https://huggingface.co/docs/trl/en/index
+
+ [10] TRL KTO Trainer — https://huggingface.co/docs/trl/main/en/kto_trainer
+
+ [11] TRL PPO Trainer — https://huggingface.co/docs/trl/main/en/ppo_trainer
+
+ [12] OpenPipe ART (Agent Reinforcement Trainer, GRPO for agents) — https://github.com/OpenPipe/ART
