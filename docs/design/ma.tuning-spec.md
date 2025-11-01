@@ -182,7 +182,7 @@
 
  ---
 
- ## One universal “stage” abstraction
+## One universal “phase” abstraction
 
  A stage composes: source → curate → optimize → apply.
 
@@ -192,7 +192,7 @@
      uri: str  # e.g., live://graph/<id>, trace://langfuse/<project>/<task>, dataset://hf/<name>, replay://buffer
 
  @dataclass
- class Stage:
+class Phase:
      name: str
      source: Source                      # where experience comes from
      curate: Callable[..., Iterable]     # to_sft / to_preferences / to_trajectories
@@ -200,18 +200,18 @@
      apply: Callable[[Artefact], None]   # adapter://lora, model://version, policy://swap
 
  @dataclass
- class Plan:
+class Plan:
      stages: list[Stage]
      guard: dict | None = None  # simple acceptance criteria, e.g., min metrics
 
- def run(plan: Plan):
-     for s in plan.stages:
-         ds = s.curate(resolve(s.source))
-         artefact = s.optimize.fit(ds, config={})
-         s.apply(artefact)
+def run(plan: Plan):
+    for p in plan.phases:
+        ds = p.curate(resolve(p.source))
+        artefact = p.optimize.fit(ds, config={})
+        p.apply(artefact)
  ```
 
- This keeps all methods uniform. SFT is just `trace -> to_sft -> TRL_SFT -> apply_lora`. Online RL is `live -> to_trajectories -> VERL_RL -> apply_lora`.
+This keeps all methods uniform. SFT is just `trace -> to_sft -> TRL_SFT -> apply_lora`. Online RL is `live -> to_trajectories -> VERL_RL -> apply_lora`.
 
  ---
 
@@ -252,24 +252,24 @@
  # 2) Start event collection (LangFuse is already set up in ma.tracing)
  collector = mt.collect_from(graph, project="proj1", task="codegen")
 
- # 3) Define a staged plan
+# 3) Define a phased plan
  plan = mt.Plan(
-     stages=[
-         mt.Stage(
+    phases=[
+        mt.Phase(
              name="bootstrap-sft",
              source=mt.Source("trace://langfuse/proj1/codegen"),
              curate=mt.to_sft,
              optimize=mt.TRL_SFT(model="Qwen/Qwen2.5-7B", lora=True),
              apply=mt.apply_lora,
          ),
-         mt.Stage(
+        mt.Phase(
              name="align-dpo",
              source=mt.Source("trace://langfuse/proj1/codegen"),
              curate=mt.to_preferences,
              optimize=mt.TRL_DPO(model="Qwen/Qwen2.5-7B", lora=True),
              apply=mt.apply_lora,
          ),
-         mt.Stage(
+        mt.Phase(
              name="online-rl",
              source=mt.Source("live://graph/codegen"),
              curate=mt.to_trajectories,
