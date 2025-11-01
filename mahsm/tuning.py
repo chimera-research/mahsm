@@ -76,6 +76,48 @@ def to_trajectories(source: Any, **kwargs) -> Iterable[dict]:
     return []
 
 
+def to_dspy_examples(
+    source: Any,
+    signature: Any,
+    input_fields: Optional[list[str]] = None,
+    input_path: str = "step.input.prompt",
+    output_field: str = "answer",
+    output_path: str = "step.output.text",
+) -> Iterable[Any]:
+    """Convert resolved items (e.g., LangFuse observations) to Iterable[dspy.Example].
+
+    - input_fields: DSPy input field names (default: ["question"]).
+    - input_path/output_path: dot-paths into each item (defaults assume our normalized step shape).
+    - output_field: DSPy output field name (default: "answer").
+    """
+    try:
+        import dspy
+    except ImportError as e:
+        raise RuntimeError(f"to_dspy_examples requires DSPy installed: {e}")
+
+    def get_path(obj: Any, path: str):
+        cur = obj
+        for part in path.split('.'):
+            if isinstance(cur, dict):
+                cur = cur.get(part)
+            else:
+                return None
+        return cur
+
+    fields = input_fields or ["question"]
+    out: list[Any] = []
+    if isinstance(source, list):
+        for item in source:
+            inp_val = get_path(item, input_path)
+            out_val = get_path(item, output_path)
+            if inp_val is None or out_val is None:
+                continue
+            payload = {fields[0]: inp_val, output_field: out_val}
+            ex = dspy.Example(**payload).with_inputs(*fields)
+            out.append(ex)
+    return out
+
+
 def _ensure_sft_examples(dataset: Iterable) -> list[dict]:
     out = []
     for x in dataset:
@@ -359,8 +401,7 @@ def resolve(source: Source) -> Any:
         path = uri.replace("dataset://jsonl/", "", 1)
         p = Path(path)
         if not p.exists():
-            raise FileNotFoundError(f"JSONL dataset not found: {p}
-")
+            raise FileNotFoundError(f"JSONL dataset not found: {p}")
         items: list[dict] = []
         import json
         with p.open("r", encoding="utf-8") as f:
