@@ -40,3 +40,8 @@
  Notes:
  - `policy_router_select` is a placeholder: greedy selection from probabilities.
  - Future work: JAX-backed parameters, sampling strategies, and policy gradient updates.
+
+## See also
+
+- [Special Edges Quickstart](special-edges-quickstart.md)
+- [Cost & Latency Budgeting](cost-latency-budgeting.md)

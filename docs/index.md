@@ -210,6 +210,9 @@ Check out complete examples:
 - **[Multi-Agent System](guides/multi-agent-systems.md)** - Coordinated agent teams
 - **[Evaluation Pipeline](examples/evaluation-pipeline.md)** - Comprehensive testing setup
 
+Or jump straight into the Tutorials:
+- **[Tutorials Overview](tutorials/overview.md)** — End-to-end, copy‑pasteable guides
+
 ---
 
 ## Architecture

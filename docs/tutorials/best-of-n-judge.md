@@ -43,3 +43,8 @@
  ```
 
  To use an LLM judge, write a `judge_fn(items) -> index` and wrap with `ma.reducers.judge_select(judge_fn)`.
+
+## See also
+
+- [Parameter Sweeps & Comparisons](parameter-sweeps.md)
+- [Testing & Evaluation](evaluation-testing.md)
