@@ -6,7 +6,7 @@
 
  from __future__ import annotations
 
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any, Callable, Dict, List, Optional, Sequence
 import asyncio
 import inspect
 
@@ -184,3 +184,32 @@ def make_node(edge: Edge) -> Callable[[dict], Any]:
      else:
          config["jitted"] = False
      return Edge("jit", config)
+
+
+# ---- Policy router helper (placeholder for learnable edges) ----
+
+def policy_router_select(
+    prob_fn: Callable[[dict], Sequence[float]],
+    labels: Sequence[str],
+    *,
+    strategy: str = "greedy",  # greedy | sample (future)
+) -> Callable[[dict], str]:
+    """Create a route selector function for add_conditional_edges.
+
+    - prob_fn(state) -> probs over labels (same order)
+    - returns a function(state) -> selected label
+
+    Note: Placeholder implementation (no RNG/temperature). Intended as the
+    surface for future JAX/RL-backed learnable routers.
+    """
+    label_list = list(labels)
+
+    def route_fn(state: dict) -> str:
+        probs = list(prob_fn(state))
+        if not probs or len(probs) != len(label_list):
+            raise ValueError("prob_fn must return probs for each label")
+        # greedy selection for now
+        idx = max(range(len(probs)), key=lambda i: probs[i])
+        return label_list[idx]
+
+    return route_fn
