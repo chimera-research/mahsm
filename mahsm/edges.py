@@ -130,6 +130,7 @@ def make_node(edge: Edge) -> Callable[[dict], Any]:
         rate_limit = cfg.get("rate_limit", {}) or {}
         rps = rate_limit.get("rps", None)
         burst = rate_limit.get("burst", 1)
+        key_fn: Optional[Callable[[dict], Any]] = rate_limit.get("key_fn")
         telemetry: bool = bool(cfg.get("telemetry", False))
         telemetry_key: str = str(cfg.get("telemetry_key", "_edges_meta"))
 
@@ -161,13 +162,28 @@ def make_node(edge: Edge) -> Callable[[dict], Any]:
                 return {out_key: []}
 
             sem = asyncio.Semaphore(max(1, max_concurrency))
-            bucket = _TokenBucket(float(rps), int(burst)) if rps else None
+            bucket = _TokenBucket(float(rps), int(burst)) if (rps and not key_fn) else None
+            buckets: Dict[Any, _TokenBucket] = {}
+
+            def bucket_for(key: Any) -> _TokenBucket:
+                b = buckets.get(key)
+                if b is None:
+                    b = _TokenBucket(float(rps), int(burst))  # type: ignore[arg-type]
+                    buckets[key] = b
+                return b
 
             async def run_one(idx_item):
                 idx, item = idx_item
                 async with sem:
-                    if bucket is not None:
-                        await bucket.acquire()
+                    if rps:
+                        if key_fn is not None:
+                            try:
+                                key = key_fn(call_state)
+                            except Exception:
+                                key = None
+                            await bucket_for(key).acquire()
+                        elif bucket is not None:
+                            await bucket.acquire()
                     partial = item_to_state(item)
                     call_state = {**state, **partial}
                     result = await _maybe_await(target(call_state))
@@ -190,6 +206,8 @@ def make_node(edge: Edge) -> Callable[[dict], Any]:
                     "rps": rps,
                     "burst": burst,
                 }
+                if key_fn is not None:
+                    update[telemetry_key]["distinct_keys"] = len(buckets)
             return update
 
         return vmap_node
