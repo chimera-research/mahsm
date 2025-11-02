@@ -17,7 +17,20 @@
  result = graph.invoke(state, config={"callbacks": [handler] if handler else []})
  ```
 
- The spans include names like `edges.vmap`, `edges.reduce`, `edges.parallel`. Inputs/outputs are captured by the decorator if your LangFuse setup enables it.
+The spans include names like `edges.vmap`, `edges.reduce`, `edges.parallel`. Inputs/outputs are captured by the decorator if your LangFuse setup enables it.
+
+Optional telemetry in-state:
+
+- You can enable lightweight per-edge metadata by setting `telemetry=True` when constructing edges. Metadata is returned under `_edges_meta` by default (configurable via `telemetry_key`).
+- Example:
+
+```python
+edge_map = ma.edges.vmap(..., telemetry=True)            # adds fanout, rps, burst, etc.
+edge_reduce = ma.edges.reduce_edge(..., telemetry=True)  # adds reducer name and input length
+edge_par = ma.edges.parallel(..., telemetry=True)        # adds scheduler and branch count
+```
+
+This makes it easy to align LangFuse spans with explicit counters directly in the graph state for debugging or evaluation. Keep it off in production if you want a clean state.
 
  ## Evaluation via EvalProtocol
 

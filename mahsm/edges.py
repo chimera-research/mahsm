@@ -35,6 +35,8 @@ def vmap(
     max_concurrency: int = 8,
     preserve_order: bool = True,
     rate_limit: Optional[Dict[str, Any]] = None,
+    telemetry: bool = False,
+    telemetry_key: str = "_edges_meta",
 ) -> Edge:
     """Vectorized fan-out over a sequence in state; collects results into out_key.
     Placeholder: returns Edge descriptor only.
@@ -49,6 +51,8 @@ def vmap(
             "max_concurrency": max_concurrency,
             "preserve_order": preserve_order,
             "rate_limit": rate_limit or {},
+            "telemetry": telemetry,
+            "telemetry_key": telemetry_key,
         },
     )
 
@@ -58,6 +62,8 @@ def parallel(
     *,
     merge: Optional[Callable[..., Dict[str, Any]]] = None,
     scheduler: str = "parallel",  # sequential|parallel|wave
+    telemetry: bool = False,
+    telemetry_key: str = "_edges_meta",
 ) -> Edge:
     """Parallel branch execution with optional custom merge function.
     Placeholder: returns Edge descriptor only.
@@ -68,6 +74,8 @@ def parallel(
             "branches": branches,
             "merge": merge,
             "scheduler": scheduler,
+            "telemetry": telemetry,
+            "telemetry_key": telemetry_key,
         },
     )
 
@@ -77,6 +85,8 @@ def reduce_edge(
     input_key: str,
     output_key: str,
     reducer: Callable[[List[Any]], Any],
+    telemetry: bool = False,
+    telemetry_key: str = "_edges_meta",
 ) -> Edge:
     """Aggregate a collection in state into a single artifact.
     Placeholder: returns Edge descriptor only.
@@ -87,6 +97,8 @@ def reduce_edge(
             "input_key": input_key,
             "output_key": output_key,
             "reducer": reducer,
+            "telemetry": telemetry,
+            "telemetry_key": telemetry_key,
         },
     )
 
@@ -118,6 +130,8 @@ def make_node(edge: Edge) -> Callable[[dict], Any]:
         rate_limit = cfg.get("rate_limit", {}) or {}
         rps = rate_limit.get("rps", None)
         burst = rate_limit.get("burst", 1)
+        telemetry: bool = bool(cfg.get("telemetry", False))
+        telemetry_key: str = str(cfg.get("telemetry_key", "_edges_meta"))
 
         class _TokenBucket:
             def __init__(self, rate: float, burst: int):
@@ -166,7 +180,17 @@ def make_node(edge: Edge) -> Callable[[dict], Any]:
             if preserve_order:
                 results.sort(key=lambda p: p[0])
             outputs = [upd for _, upd in results]
-            return {out_key: outputs}
+            update = {out_key: outputs}
+            if telemetry:
+                update[telemetry_key] = {
+                    "edge": "vmap",
+                    "fanout": len(items),
+                    "max_concurrency": max_concurrency,
+                    "preserve_order": preserve_order,
+                    "rps": rps,
+                    "burst": burst,
+                }
+            return update
 
         return vmap_node
 
@@ -175,12 +199,22 @@ def make_node(edge: Edge) -> Callable[[dict], Any]:
         input_key: str = cfg["input_key"]
         output_key: str = cfg["output_key"]
         reducer: Callable[[List[Any]], Any] = cfg["reducer"]
+        telemetry: bool = bool(cfg.get("telemetry", False))
+        telemetry_key: str = str(cfg.get("telemetry_key", "_edges_meta"))
 
         @_observe(name="edges.reduce")
         def reduce_node(state: dict) -> dict:
             values = state.get(input_key, [])
             result = reducer(values)
-            return {output_key: result}
+            update = {output_key: result}
+            if telemetry:
+                update[telemetry_key] = {
+                    "edge": "reduce",
+                    "input_len": len(values) if hasattr(values, "__len__") else None,
+                    "reducer": getattr(reducer, "__name__", "callable"),
+                    "output_key": output_key,
+                }
+            return update
 
         return reduce_node
 
@@ -189,6 +223,8 @@ def make_node(edge: Edge) -> Callable[[dict], Any]:
         branches: List[Any] = list(cfg.get("branches", []))
         merge: Optional[Callable[..., Dict[str, Any]]] = cfg.get("merge")
         scheduler: str = str(cfg.get("scheduler", "parallel"))
+        telemetry: bool = bool(cfg.get("telemetry", False))
+        telemetry_key: str = str(cfg.get("telemetry_key", "_edges_meta"))
 
         norm_branches: List[Callable[[dict], Any]] = []
         for br in branches:
@@ -216,12 +252,28 @@ def make_node(edge: Edge) -> Callable[[dict], Any]:
                     upd = upd or {}
                     updates.append(upd)
                     cur_state = {**cur_state, **upd}
-                return await _merge_updates(updates)
+                merged = await _merge_updates(updates)
+                if telemetry:
+                    merged[telemetry_key] = {
+                        "edge": "parallel",
+                        "branches": len(norm_branches),
+                        "scheduler": scheduler,
+                        "mode": "sequential",
+                    }
+                return merged
             else:  # parallel and wave -> run concurrently for now
                 coros = [ _maybe_await(br(state)) for br in norm_branches ]
                 results = await asyncio.gather(*coros)
                 updates = [r or {} for r in results]
-                return await _merge_updates(updates)
+                merged = await _merge_updates(updates)
+                if telemetry:
+                    merged[telemetry_key] = {
+                        "edge": "parallel",
+                        "branches": len(norm_branches),
+                        "scheduler": scheduler,
+                        "mode": "parallel",
+                    }
+                return merged
 
         return parallel_node
 
