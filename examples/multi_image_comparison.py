@@ -18,10 +18,10 @@ Requirements:
     pip install dspy pillow
 
 Environment Variables:
-    OPENAI_API_KEY: Your OpenAI API key (for GPT-4o-mini)
+    OPENAI_API_KEY: Your OpenAI API key (for GPT-5-mini)
     
 Cost Estimate:
-    ~$0.30 per comparison (2 images with GPT-4o-mini)
+    ~$0.25 per comparison (2 images with GPT-5-mini)
 """
 
 import dspy
@@ -315,7 +315,7 @@ def run_example():
     print("=" * 60)
     
     # Configure DSPy
-    print("\\n📝 Configuring DSPy with GPT-4o-mini...")
+    print("\\n📝 Configuring DSPy with GPT-5-mini...")
     api_key = os.getenv("OPENAI_API_KEY")
     if not api_key:
         print("❌ Error: OPENAI_API_KEY environment variable not set")

@@ -18,10 +18,10 @@ Requirements:
     pip install dspy pillow
 
 Environment Variables:
-    OPENAI_API_KEY: Your OpenAI API key (for GPT-4o-mini)
+    OPENAI_API_KEY: Your OpenAI API key (for GPT-5-mini)
     
 Cost Estimate:
-    ~$0.15 per document (with GPT-4o-mini)
+    ~$0.12 per document (with GPT-5-mini)
 """
 
 import dspy
@@ -422,7 +422,7 @@ def run_example():
     print("✨ Document Understanding Agent Demo Complete!")
     print("=" * 60)
     print("\\n💡 Cost Efficiency:")
-    print("   • GPT-4o-mini: ~$0.15 per document")
+    print("   • GPT-4o-mini: ~$0.12 per document")
     print("   • No separate OCR service needed")
     print("   • Structured output with confidence scores")
     print("   • Handles various document types\\n")

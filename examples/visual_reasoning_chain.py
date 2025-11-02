@@ -18,10 +18,10 @@ Requirements:
     pip install dspy pillow
 
 Environment Variables:
-    OPENAI_API_KEY: Your OpenAI API key (for GPT-4o-mini)
+    OPENAI_API_KEY: Your OpenAI API key (for GPT-5-mini)
     
 Cost Estimate:
-    ~$0.30-0.75 per analysis (multiple reasoning steps with GPT-4o-mini)
+    ~$0.25-0.60 per analysis (multiple reasoning steps with GPT-5-mini)
 """
 
 import dspy
@@ -513,7 +513,7 @@ def run_example():
     print("   • Alternative interpretations: Consider other views")
     print("\\n💰 Cost Efficiency:")
     print("   • Standard analysis: ~$0.30-0.45 (2-3 LLM calls)")
-    print("   • Deep analysis: ~$0.60-0.75 (4-5 LLM calls)")
+    print("   • Deep analysis: ~$0.50-0.60 (4-5 LLM calls)")
     print("   • All with GPT-4o-mini pricing\\n")
 
 
