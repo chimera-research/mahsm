@@ -21,6 +21,7 @@ from . import tracing
 from . import dspy
 from . import graph
 from . import tuning
+from . import edges
 
 # Testing module (may not work on Windows due to eval-protocol dependency)
 try:
@@ -44,6 +45,7 @@ __all__ = [
     "dspy",
     "graph",
     "tuning",
+    "edges",
     "testing",
     # Convenience exports
     "END",
