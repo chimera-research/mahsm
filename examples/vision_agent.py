@@ -154,15 +154,15 @@ def run_example():
         print("   Please set it with: export OPENAI_API_KEY=your-key")
         return
     
-    # Configure with GPT-4 Vision
+    # Configure with GPT-5-mini (newest, smartest, cheapest, fastest vision model)
     dspy.configure(
         lm=dspy.LM(
-            model="openai/gpt-4o",  # Vision-capable model
+            model="openai/gpt-5-mini",  # Latest vision-capable model from OpenAI
             api_key=api_key
         )
     )
     
-    print("✅ DSPy configured with gpt-4o\n")
+    print("✅ DSPy configured with gpt-5-mini\n")
     
     # Build the agent
     print("🏗️  Building vision agent graph...")
