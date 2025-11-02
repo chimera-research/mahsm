@@ -78,6 +78,14 @@ nav:
       - 'Retrieval + Tools (RAG)': 'tutorials/rag-tools.md'
       - 'Multi-Agent Orchestration': 'tutorials/multi-agent.md'
       - 'Human-in-the-Loop (HITL)': 'tutorials/hitl.md'
+      - 'Deterministic Testing (CI)': 'tutorials/deterministic-testing.md'
+      - 'Parameter Sweeps & Comparisons': 'tutorials/parameter-sweeps.md'
+      - 'Cost & Latency Budgeting': 'tutorials/cost-latency-budgeting.md'
+      - 'Streaming UX': 'tutorials/streaming.md'
+      - 'Safety & Moderation Guards': 'tutorials/moderation-guards.md'
+      - 'Best-of-N Judge': 'tutorials/best-of-n-judge.md'
+      - 'Policy Router Quickstart': 'tutorials/policy-router-quickstart.md'
+      - 'Special Edges Quickstart': 'tutorials/special-edges-quickstart.md'
   
   - 'Building Blocks':
       - 'DSPy':
