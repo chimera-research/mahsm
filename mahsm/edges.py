@@ -61,7 +61,8 @@ except Exception:
      branches: List[Any],
      *,
      merge: Optional[Callable[..., Dict[str, Any]]] = None,
-     scheduler: str = "parallel",  # sequential|parallel|wave
+    scheduler: str = "parallel",  # sequential|parallel|wave
+    wave_size: Optional[int] = None,
     telemetry: bool = False,
     telemetry_key: str = "_edges_meta",
  ) -> Edge:
@@ -73,7 +74,8 @@ except Exception:
          {
              "branches": branches,
              "merge": merge,
-             "scheduler": scheduler,
+            "scheduler": scheduler,
+            "wave_size": wave_size,
             "telemetry": telemetry,
             "telemetry_key": telemetry_key,
          },
@@ -241,6 +243,7 @@ def make_node(edge: Edge) -> Callable[[dict], Any]:
         branches: List[Any] = list(cfg.get("branches", []))
         merge: Optional[Callable[..., Dict[str, Any]]] = cfg.get("merge")
         scheduler: str = str(cfg.get("scheduler", "parallel"))
+        wave_size: Optional[int] = cfg.get("wave_size")
         telemetry: bool = bool(cfg.get("telemetry", False))
         telemetry_key: str = str(cfg.get("telemetry_key", "_edges_meta"))
 
@@ -277,6 +280,30 @@ def make_node(edge: Edge) -> Callable[[dict], Any]:
                         "branches": len(norm_branches),
                         "scheduler": scheduler,
                         "mode": "sequential",
+                    }
+                return merged
+            elif scheduler == "wave":
+                # Execute in waves of size `wave_size` (default: all at once)
+                size = int(wave_size or len(norm_branches))
+                size = max(1, min(size, len(norm_branches)))
+                all_updates: List[Dict[str, Any]] = []
+                cur_state = dict(state)
+                for i in range(0, len(norm_branches), size):
+                    chunk = norm_branches[i:i+size]
+                    results = await asyncio.gather(*[_maybe_await(br(cur_state)) for br in chunk])
+                    wave_updates = [r or {} for r in results]
+                    # merge into current state between waves
+                    wave_merged = await _merge_updates(wave_updates)
+                    cur_state = {**cur_state, **wave_merged}
+                    all_updates.extend(wave_updates)
+                merged = await _merge_updates(all_updates)
+                if telemetry:
+                    merged[telemetry_key] = {
+                        "edge": "parallel",
+                        "branches": len(norm_branches),
+                        "scheduler": scheduler,
+                        "mode": "wave",
+                        "wave_size": size,
                     }
                 return merged
             else:

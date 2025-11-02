@@ -16,7 +16,7 @@ def b(st):
     # sees updated state from previous wave
     return {"b": st.get("a", 0) + 1}
 
-edge = ma.edges.parallel([a, b], scheduler="wave")  # wave behaves like parallel until wave_size is added
+edge = ma.edges.parallel([a, b], scheduler="wave", wave_size=1)  # process one branch per wave
 node = ma.edges.make_node(edge)
 
 import asyncio
@@ -25,5 +25,5 @@ assert "a" in result and "b" in result
 ```
 
 Notes:
-- Current implementation treats `wave` like `parallel` until a `wave_size` option is introduced.
-- In a future iteration, `wave_size` will batch branches and apply merges between waves.
+- `wave_size` controls how many branches run concurrently in each wave.
+- After every wave, updates are merged into state before the next wave starts.
