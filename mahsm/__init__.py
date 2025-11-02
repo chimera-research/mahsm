@@ -20,8 +20,8 @@ from . import tracing
 # Curated namespaces
 from . import dspy
 from . import graph
-from . import tuning
 from . import edges
+from . import reducers
 
 # Testing module (may not work on Windows due to eval-protocol dependency)
 try:
@@ -44,8 +44,8 @@ __all__ = [
     "tracing",
     "dspy",
     "graph",
-    "tuning",
     "edges",
+    "reducers",
     "testing",
     # Convenience exports
     "END",

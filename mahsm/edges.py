@@ -9,6 +9,7 @@
 from typing import Any, Callable, Dict, List, Optional, Sequence
 import asyncio
 import inspect
+import time
 
 
  class Edge:  # minimal placeholder type for integration discussion
@@ -108,6 +109,28 @@ def make_node(edge: Edge) -> Callable[[dict], Any]:
         preserve_order: bool = bool(cfg.get("preserve_order", True))
         rate_limit = cfg.get("rate_limit", {}) or {}
         rps = rate_limit.get("rps", None)
+        burst = rate_limit.get("burst", 1)
+
+        class _TokenBucket:
+            def __init__(self, rate: float, burst: int):
+                self.rate = float(rate)
+                self.capacity = max(1.0, float(burst))
+                self.tokens = self.capacity
+                self._last = time.perf_counter()
+                self._lock = asyncio.Lock()
+
+            async def acquire(self):
+                async with self._lock:
+                    while True:
+                        now = time.perf_counter()
+                        elapsed = now - self._last
+                        self._last = now
+                        self.tokens = min(self.capacity, self.tokens + elapsed * self.rate)
+                        if self.tokens >= 1.0:
+                            self.tokens -= 1.0
+                            return
+                        needed = (1.0 - self.tokens) / self.rate
+                        await asyncio.sleep(max(0.0, needed))
 
         async def vmap_node(state: dict) -> dict:
             items = list(state.get(batch_key, []))
@@ -115,13 +138,13 @@ def make_node(edge: Edge) -> Callable[[dict], Any]:
                 return {out_key: []}
 
             sem = asyncio.Semaphore(max(1, max_concurrency))
+            bucket = _TokenBucket(float(rps), int(burst)) if rps else None
 
             async def run_one(idx_item):
                 idx, item = idx_item
                 async with sem:
-                    if rps:
-                        # naive pacing to avoid burst; coarse but predictable
-                        await asyncio.sleep(1.0 / float(rps))
+                    if bucket is not None:
+                        await bucket.acquire()
                     partial = item_to_state(item)
                     call_state = {**state, **partial}
                     result = await _maybe_await(target(call_state))
