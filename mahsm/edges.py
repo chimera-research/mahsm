@@ -11,6 +11,14 @@ import asyncio
 import inspect
 import time
 
+try:
+    from .tracing import observe as _observe
+except Exception:
+    def _observe(*args, **kwargs):
+        def deco(fn):
+            return fn
+        return deco
+
 
  class Edge:  # minimal placeholder type for integration discussion
      def __init__(self, kind: str, config: Dict[str, Any]):
@@ -132,6 +140,7 @@ def make_node(edge: Edge) -> Callable[[dict], Any]:
                         needed = (1.0 - self.tokens) / self.rate
                         await asyncio.sleep(max(0.0, needed))
 
+        @_observe(name="edges.vmap")
         async def vmap_node(state: dict) -> dict:
             items = list(state.get(batch_key, []))
             if not items:
@@ -167,12 +176,54 @@ def make_node(edge: Edge) -> Callable[[dict], Any]:
         output_key: str = cfg["output_key"]
         reducer: Callable[[List[Any]], Any] = cfg["reducer"]
 
+        @_observe(name="edges.reduce")
         def reduce_node(state: dict) -> dict:
             values = state.get(input_key, [])
             result = reducer(values)
             return {output_key: result}
 
         return reduce_node
+
+    if edge.kind == "parallel":
+        cfg = edge.config
+        branches: List[Any] = list(cfg.get("branches", []))
+        merge: Optional[Callable[..., Dict[str, Any]]] = cfg.get("merge")
+        scheduler: str = str(cfg.get("scheduler", "parallel"))
+
+        norm_branches: List[Callable[[dict], Any]] = []
+        for br in branches:
+            if isinstance(br, Edge):
+                norm_branches.append(make_node(br))
+            else:
+                norm_branches.append(br)
+
+        async def _merge_updates(updates: List[Dict[str, Any]]) -> Dict[str, Any]:
+            if merge is not None:
+                res = merge(*updates)
+                return await _maybe_await(res)
+            out: Dict[str, Any] = {}
+            for upd in updates:
+                out.update(upd or {})
+            return out
+
+        @_observe(name="edges.parallel")
+        async def parallel_node(state: dict) -> dict:
+            if scheduler == "sequential":
+                updates: List[Dict[str, Any]] = []
+                cur_state = dict(state)
+                for br in norm_branches:
+                    upd = await _maybe_await(br(cur_state))
+                    upd = upd or {}
+                    updates.append(upd)
+                    cur_state = {**cur_state, **upd}
+                return await _merge_updates(updates)
+            else:
+                coros = [_maybe_await(br(state)) for br in norm_branches]
+                results = await asyncio.gather(*coros)
+                updates = [r or {} for r in results]
+                return await _merge_updates(updates)
+
+        return parallel_node
 
     # parallel and jit are placeholders for now
     def unsupported_node(state: dict) -> dict:
