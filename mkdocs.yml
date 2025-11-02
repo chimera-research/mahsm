@@ -1,6 +1,6 @@
 # mkdocs.yml
 
-site_name: mahsm v0.1.0
+site_name: mahsm v0.2.0
 site_url: https://chimera-research.github.io/mahsm/
 site_author: Sohum Kothavade
 site_description: A Declarative Framework for Building Production-Grade AI Systems
@@ -68,6 +68,16 @@ nav:
       - 'Installation': 'getting-started/installation.md'
       - 'Quick Start': 'getting-started/quickstart.md'
       - 'Core Concepts': 'getting-started/core-concepts.md'
+  
+  - 'Tutorials':
+      - 'Overview': 'tutorials/overview.md'
+      - 'Hello Graph': 'tutorials/hello-graph.md'
+      - 'Codegen + Critique Loop': 'tutorials/codegen-critique.md'
+      - 'Observability with Langfuse': 'tutorials/langfuse-observability.md'
+      - 'Testing & Evaluation': 'tutorials/evaluation-testing.md'
+      - 'Retrieval + Tools (RAG)': 'tutorials/rag-tools.md'
+      - 'Multi-Agent Orchestration': 'tutorials/multi-agent.md'
+      - 'Human-in-the-Loop (HITL)': 'tutorials/hitl.md'
   
   - 'Building Blocks':
       - 'DSPy':

@@ -1,4 +1,4 @@
-"""
+﻿"""
 Smoke tests for mahsm - Quick sanity checks to verify nothing is fundamentally broken.
 
 These tests should be extremely fast (<1s total) and catch major breakage.
@@ -137,11 +137,11 @@ def test_testing_module_optional():
 
 
 def test_tuning_module_temporarily_disabled():
-    """Test that tuning module is temporarily disabled."""
+    """Test that tuning module namespace is available."""
     import mahsm as ma
     
     # Tuning module should NOT be available (temporarily disabled due to syntax error)
-    assert not hasattr(ma, "tuning")
+    assert hasattr(ma, "tuning")
     # TODO: Re-enable test once tuning.py is fixed
 
 
@@ -178,3 +178,4 @@ def test_no_syntax_errors_in_modules():
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
+

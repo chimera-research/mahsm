@@ -1,4 +1,4 @@
-"""
+﻿"""
 Unit tests for mahsm exports - Testing all public APIs are properly exported.
 """
 import pytest
@@ -217,12 +217,12 @@ class TestTestingNamespace:
 
 
 class TestTuningNamespace:
-    """Test tuning namespace (currently disabled)."""
+    """Test tuning namespace availability and minimal surface."""
     
-    def test_tuning_temporarily_disabled(self):
-        """Test that tuning is temporarily disabled."""
+    def test_tuning_available(self):
+        """Test that tuning namespace is available."""
         # Should NOT be available (syntax error being fixed)
-        assert not hasattr(ma, "tuning")
+        assert hasattr(ma, "tuning")
 
 
 class TestNamespaceConsistency:
@@ -356,3 +356,4 @@ class TestExportUsability:
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
+

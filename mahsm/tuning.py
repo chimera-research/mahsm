@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import os
 import time
@@ -34,40 +34,189 @@ class Event(TypedDict, total=False):
     tags: list[str]
     ts: float
 
-
 def emit(event: Event) -> None:
-    return None
+    """Best-effort emission of an Event to LangFuse as an observation.
+
+    - If LangFuse SDK or credentials are unavailable, this is a no-op.
+    - Uses observation type 'SPAN' and stores event payload in input/output fields.
+    """
+    try:
+        try:
+            from langfuse import get_client  # type: ignore
+            client = get_client()
+        except Exception:
+            from langfuse import Langfuse  # type: ignore
+            client = Langfuse()
+        # observation.create signature may vary across SDK versions; use kwargs defensively
+        payload = {k: v for k, v in event.items() if k not in ("ts",)}
+        ts = event.get("ts")
+        kwargs = {
+            "trace_id": event.get("episode_id"),
+            "type": "SPAN",
+            "name": "mahsm.event",
+            "input": payload,
+            "output": (event.get("reward") or {}),
+        }
+        if ts:
+            kwargs["start_time"] = ts
+        try:
+            getattr(client.api.observation, "create")(**kwargs)  # type: ignore[attr-defined]
+        except Exception:
+            # Fallback: try trace.log if available
+            try:
+                getattr(client.api.trace, "log")(trace_id=event.get("episode_id"), data=payload)  # type: ignore[attr-defined]
+            except Exception:
+                pass
+    except Exception:
+        # Swallow all errors to avoid breaking runtime
+        return None
 
 
-def to_sft(source: Any, **kwargs) -> Iterable[dict]:
-    template = kwargs.get("template", "{prompt}\n{output}")
-    if isinstance(source, list):
-        out = []
-        for item in source:
-            if isinstance(item, dict) and "text" in item:
-                out.append({"text": item["text"]})
-            elif isinstance(item, dict) and "prompt" in item and "output" in item:
-                text = template.format(prompt=item["prompt"], output=item["output"])
-                out.append({"text": text})
-            elif isinstance(item, dict) and "step" in item:
-                step = item.get("step") or {}
-                prompt = (step.get("input") or {}).get("prompt")
-                output = (step.get("output") or {}).get("text")
-                if prompt and output:
-                    text = template.format(prompt=prompt, output=output)
-                    out.append({"text": text})
-        return out
-    return []
+def to_sft(
+    source: Any,
+    *,
+    template: str = "{prompt}\n{output}",
+    dedupe: bool = True,
+    top_k: Optional[int] = None,
+    min_reward: Optional[float] = None,
+) -> Iterable[dict]:
+    """Convert items/traces into TRL SFT examples.
+
+    Supports basic filters:
+    - dedupe: drop duplicate prompts
+    - top_k: keep top-k by reward (when available)
+    - min_reward: drop items with reward below threshold (when available)
+    """
+    if not isinstance(source, list):
+        return []
+    items = list(source)
+
+    def reward_of(it: dict) -> Optional[float]:
+        r = it.get("reward") if isinstance(it, dict) else None
+        if isinstance(r, dict):
+            try:
+                return float(r.get("value"))
+            except Exception:
+                return None
+        return None
+
+    # Filter by min_reward if provided
+    if min_reward is not None:
+        items = [it for it in items if (reward_of(it) or 0.0) >= float(min_reward)]
+
+    # Prepare examples
+    prepared: list[tuple[str, dict]] = []  # (prompt, example)
+    for item in items:
+        if isinstance(item, dict) and "text" in item:
+            txt = str(item["text"])
+            prepared.append((txt, {"text": txt}))
+        elif isinstance(item, dict) and "prompt" in item and "output" in item:
+            prompt = str(item["prompt"]) if item.get("prompt") is not None else ""
+            output = str(item["output"]) if item.get("output") is not None else ""
+            if prompt and output:
+                text = template.format(prompt=prompt, output=output)
+                prepared.append((prompt, {"text": text}))
+        elif isinstance(item, dict) and "step" in item:
+            step = item.get("step") or {}
+            prompt = (step.get("input") or {}).get("prompt")
+            output = (step.get("output") or {}).get("text")
+            if prompt and output:
+                text = template.format(prompt=prompt, output=output)
+                prepared.append((str(prompt), {"text": text}))
+
+    # Dedupe by prompt
+    if dedupe:
+        seen: set[str] = set()
+        deduped: list[tuple[str, dict]] = []
+        for k, v in prepared:
+            if k in seen:
+                continue
+            seen.add(k)
+            deduped.append((k, v))
+        prepared = deduped
+
+    # Rank by reward desc if available
+    if top_k is not None and top_k > 0:
+        # Attach rewards where possible; none -> -inf
+        def key_fn(pair: tuple[str, dict]) -> float:
+            # Find original item by prompt; approximate mapping
+            prompt = pair[0]
+            # Scan items to find first with this prompt and reward
+            for it in items:
+                if isinstance(it, dict):
+                    p = None
+                    if "prompt" in it:
+                        p = it["prompt"]
+                    elif "step" in it:
+                        p = ((it.get("step") or {}).get("input") or {}).get("prompt")
+                    if p == prompt:
+                        val = reward_of(it)
+                        return float(val) if val is not None else float("-inf")
+            return float("-inf")
+
+        prepared = sorted(prepared, key=key_fn, reverse=True)[: int(top_k)]
+
+    return [ex for _, ex in prepared]
 
 
-def to_preferences(source: Any, **kwargs) -> Iterable[dict]:
-    if isinstance(source, list):
-        out = []
-        for item in source:
-            if all(k in item for k in ("prompt", "chosen", "rejected")):
-                out.append({"prompt": item["prompt"], "chosen": item["chosen"], "rejected": item["rejected"]})
-        return out
-    return []
+def to_preferences(
+    source: Any,
+    *,
+    dedupe: bool = True,
+    top_k: Optional[int] = None,
+    min_reward: Optional[float] = None,
+) -> Iterable[dict]:
+    """Convert items into DPO/ORPO preference pairs.
+
+    Items must contain keys: prompt, chosen, rejected.
+    """
+    if not isinstance(source, list):
+        return []
+    items = list(source)
+
+    def reward_of(it: dict) -> Optional[float]:
+        r = it.get("reward") if isinstance(it, dict) else None
+        if isinstance(r, dict):
+            try:
+                return float(r.get("value"))
+            except Exception:
+                return None
+        return None
+
+    if min_reward is not None:
+        items = [it for it in items if (reward_of(it) or 0.0) >= float(min_reward)]
+
+    out: list[dict] = []
+    for item in items:
+        if all(k in item for k in ("prompt", "chosen", "rejected")):
+            out.append({"prompt": item["prompt"], "chosen": item["chosen"], "rejected": item["rejected"]})
+
+    # Dedupe by prompt
+    if dedupe:
+        seen: set[str] = set()
+        deduped: list[dict] = []
+        for it in out:
+            p = str(it.get("prompt"))
+            if p in seen:
+                continue
+            seen.add(p)
+            deduped.append(it)
+        out = deduped
+
+    # Top-k by reward if available
+    if top_k is not None and top_k > 0:
+        def key_fn(it: dict) -> float:
+            # Find matching item to read reward
+            p = it.get("prompt")
+            for src in items:
+                if isinstance(src, dict) and src.get("prompt") == p:
+                    val = reward_of(src)
+                    return float(val) if val is not None else float("-inf")
+            return float("-inf")
+
+        out = sorted(out, key=key_fn, reverse=True)[: int(top_k)]
+
+    return out
 
 
 def to_trajectories(source: Any, **kwargs) -> Iterable[dict]:
