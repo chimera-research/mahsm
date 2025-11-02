@@ -1,4 +1,4 @@
-"""
+﻿"""
 Pytest configuration and shared fixtures for mahsm tests.
 """
 import pytest
@@ -23,7 +23,7 @@ def mock_dspy_lm():
     mock_lm = MagicMock()
     mock_lm.__call__ = MagicMock(return_value={"answer": "mocked response"})
     
-    with patch('dspy.settings.configure') as mock_configure:
+    with patch('dspy.settings.configure', create=True) as mock_configure:
         yield mock_configure
 
 
@@ -197,3 +197,4 @@ def pytest_configure(config):
     config.addinivalue_line(
         "markers", "requires_llm: mark test as requiring actual LLM API"
     )
+
