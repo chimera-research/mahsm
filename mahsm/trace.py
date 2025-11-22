@@ -1,5 +1,5 @@
 """
-mahsm.tracing - Langfuse integration for tracing LLM calls
+mahsm.trace - Langfuse integration for tracing LLM calls
 
 This module handles all Langfuse-related tracing functionality:
 - Langfuse client initialization
@@ -8,7 +8,7 @@ This module handles all Langfuse-related tracing functionality:
 - Manual @observe decorator for custom tracing
 """
 
-from langfuse import Langfuse, get_client
+from langfuse import Langfuse, get_client, observe
 from langfuse.langchain import CallbackHandler
 from openinference.instrumentation.dspy import DSPyInstrumentor
 import os
@@ -16,15 +16,12 @@ import warnings
 
 # Try to import observe decorator (may not be available in all langfuse versions)
 try:
-    from langfuse.decorators import observe
+    from langfuse import observe
 except ImportError:
-    try:
-        from langfuse import observe
-    except ImportError:
-        # Provide a no-op decorator if observe is not available
-        def observe(func):
-            """No-op decorator when langfuse.observe is not available."""
-            return func
+    # Provide a no-op decorator if observe is not available
+    def observe(func):
+        """No-op decorator when Langfuse's @observe is not available."""
+        return func
 
 
 def init(
@@ -102,11 +99,7 @@ def init(
     
     # Return callback handler for LangGraph integration
     try:
-        handler = CallbackHandler(
-            public_key=public_key,
-            secret_key=secret_key,
-            host=host,
-        )
+        handler = CallbackHandler(        )
         print("✓ mahsm.tracing: LangGraph callback handler ready")
         return handler
     except Exception as e:

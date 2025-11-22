@@ -5,30 +5,33 @@ A unified framework for building, tracing, evaluating, and optimizing multi-agen
 
 Core modules:
 - mahsm.core: DSPy-LangGraph integration (@dspy_node decorator)
-- mahsm.tracing: Langfuse tracing integration (init, @observe)
-- mahsm.testing: EvalProtocol integration (PytestHarness, evaluation helpers)
+- mahsm.dspy: DSPy re-export
+- mahsm.graph: LangGraph re-export
+- mahsm.trace: Langfuse tracing integration (init, @observe)
+- mahsm.test: EvalProtocol integration (PytestHarness, evaluation helpers)
+- mahsm.tuning: Tuning utilities
 """
 
-__version__ = "0.1.1"
+__version__ = "0.2.1"
 
 # Core integration
 from .core import dspy_node
 
 # Tracing (Langfuse integration)
-from . import tracing
+from . import trace
 
 # Curated namespaces
 from . import dspy
 from . import graph
-from . import tuning
+from . import tune
 
 # Testing module (may not work on Windows due to eval-protocol dependency)
 try:
-    from . import testing
+    from . import test
 except (ImportError, ModuleNotFoundError) as e:
     import warnings
     warnings.warn(
-        f"mahsm.testing module unavailable (likely Windows compatibility issue): {e}"
+        f"mahsm.test module unavailable (likely Windows compatibility issue): {e}"
     )
 
 # Top-level convenience re-exports
@@ -40,11 +43,11 @@ __all__ = [
     # Core
     "dspy_node",
     # Namespaces
-    "tracing",
+    "trace",
     "dspy",
     "graph",
-    "tuning",
-    "testing",
+    "tune",
+    "test",
     # Convenience exports
     "END",
     "START",

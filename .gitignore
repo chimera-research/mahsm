@@ -1,11 +1,7 @@
-# mahsm .gitignore
-
-# Byte-compiled / optimized / DLL files
+# Python
 __pycache__/
 *.py[cod]
 *$py.class
-
-# C extensions
 *.so
 
 # Distribution / packaging
@@ -28,15 +24,7 @@ share/python-wheels/
 *.egg
 MANIFEST
 
-# PyInstaller
-*.manifest
-*.spec
-
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
-
-# Unit test / coverage reports
+# Testing
 htmlcov/
 .tox/
 .nox/
@@ -137,23 +125,21 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
-# IDEs
-.idea/
-.vscode/
-*.swp
-*.swo
-*~
+# Local demo files (contain API keys)
+mvp_demo.py
+*_demo.py
+test_local_*.py
 
 # mahsm specific
 .mahsm/
 *.mahsm.json
 
-# OS specific
-.DS_Store
+# OS
 Thumbs.db
-
 # Temporary files
 *.tmp
 *.bak
 *.swp
 *~.nib
+
+agent_notes/*
