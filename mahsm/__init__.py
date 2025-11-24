@@ -4,7 +4,7 @@ mahsm: Multi-Agent Hyper-Scaling Methods
 A unified framework for building, tracing, evaluating, and optimizing multi-agent systems.
 
 Core modules:
-- mahsm.core: DSPy-LangGraph integration (@dspy_node decorator)
+- mahsm.core: DSPy-LangGraph integration (dspy_node helper function)
 - mahsm.dspy: DSPy re-export
 - mahsm.graph: LangGraph re-export
 - mahsm.trace: Langfuse tracing integration (init, @observe)
@@ -12,7 +12,7 @@ Core modules:
 - mahsm.tuning: Tuning utilities
 """
 
-__version__ = "0.2.1"
+__version__ = "0.2.2"
 
 # Core integration
 from .core import dspy_node
