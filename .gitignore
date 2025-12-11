@@ -145,3 +145,5 @@ Thumbs.db
 agent_notes/*
 
 dev_tools/*
+
+check_import.py
